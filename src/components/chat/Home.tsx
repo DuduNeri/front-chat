@@ -1,11 +1,55 @@
-import { Box, IconButton, Avatar, Tooltip, TextField } from "@mui/material";
+import { useState } from "react";
+import {
+  Box,
+  Paper,
+  TextField,
+  IconButton,
+  Avatar,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import {
   Home as HomeIcon,
   Settings as SettingsIcon,
-  LogOut as LogOutIcon, MicIcon, SendIcon
+  LogOut as LogOutIcon,
+  Send as SendIcon,
+  Mic as MicIcon,
+  Check as CheckIcon,
+  CircleFadingPlus,
+  CircleFadingPlusIcon,
 } from "lucide-react";
 
+interface Message {
+  id: string;
+  text: string;
+  sender: "user" | "assistant";
+  timestamp: Date;
+}
+
 const Home = () => {
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [inputValue, setInputValue] = useState("");
+
+  const handleSendMessage = () => {
+    if (inputValue.trim()) {
+      const newMessage: Message = {
+        id: Date.now().toString(),
+        text: inputValue,
+        sender: "user",
+        timestamp: new Date(),
+      };
+      setMessages([...messages, newMessage]);
+      setInputValue("");
+    }
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSendMessage();
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -16,7 +60,6 @@ const Home = () => {
         overflow: "hidden",
       }}
     >
-      {/* Barra lateral */}
       <Box
         sx={{
           width: 100,
@@ -55,7 +98,6 @@ const Home = () => {
           </IconButton>
         </Tooltip>
 
-        {/* Ícones de chat (exemplo) */}
         <Box sx={{ flex: 1, display: "flex", flexDirection: "column", gap: 2 }}>
           {[1, 2, 3].map((item) => (
             <Tooltip key={item} title={`Chat ${item}`}>
@@ -72,18 +114,41 @@ const Home = () => {
                     color: "rgba(100, 200, 255, 0.8)",
                   },
                 }}
-              />
+              >
+                <Box
+                  sx={{
+                    width: 16,
+                    height: 16,
+                    borderRadius: "50%",
+                    background: "rgba(100, 200, 255, 0.4)",
+                  }}
+                />
+              </IconButton>
             </Tooltip>
           ))}
         </Box>
 
-        {/* Botões inferiores */}
         <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+          <Tooltip title="Criar chat">
+            <IconButton
+              sx={{
+                color: "rgba(255, 255, 255, 0.5)",
+                "&:hover": {
+                  color: "rgba(100, 200, 255, 0.8)",
+                },
+              }}
+            >
+              <CircleFadingPlusIcon size={24} />
+            </IconButton>
+          </Tooltip>
+
           <Tooltip title="Página Inicial">
             <IconButton
               sx={{
                 color: "rgba(255, 255, 255, 0.5)",
-                "&:hover": { color: "rgba(100, 200, 255, 0.8)" },
+                "&:hover": {
+                  color: "rgba(100, 200, 255, 0.8)",
+                },
               }}
             >
               <HomeIcon size={24} />
@@ -94,7 +159,9 @@ const Home = () => {
             <IconButton
               sx={{
                 color: "rgba(255, 255, 255, 0.5)",
-                "&:hover": { color: "rgba(100, 200, 255, 0.8)" },
+                "&:hover": {
+                  color: "rgba(100, 200, 255, 0.8)",
+                },
               }}
             >
               <SettingsIcon size={24} />
@@ -105,7 +172,9 @@ const Home = () => {
             <IconButton
               sx={{
                 color: "rgba(255, 255, 255, 0.5)",
-                "&:hover": { color: "rgba(255, 100, 100, 0.8)" },
+                "&:hover": {
+                  color: "rgba(255, 100, 100, 0.8)",
+                },
               }}
             >
               <LogOutIcon size={24} />
@@ -114,83 +183,207 @@ const Home = () => {
         </Box>
       </Box>
 
-      {/* Área principal */}
       <Box
         sx={{
           flex: 1,
           display: "flex",
-          justifyContent: "center",
-          alignItems: "flex-end",
-          pb: 3,
-          px: 3,
+          flexDirection: "column",
+          p: 4,
+          gap: 3,
         }}
       >
-        {/* Campo de input de enviar */}
-        <TextField
-          multiline
-          maxRows={4}
-          placeholder="Digite sua mensagem..."
-          fullWidth
-          InputProps={{
-            startAdornment: (
-              <IconButton
-                size="small"
-                sx={{
-                  mr: 1,
-                  color: "rgba(100, 200, 255, 0.6)",
-                  "&:hover": {
-                    color: "rgba(100, 200, 255, 1)",
-                  },
-                }}
-              >
-                <MicIcon size={20} />
-              </IconButton>
-            ),
-            endAdornment: (
-              <IconButton
-                size="small"
-                
-                sx={{
-                  ml: 1,
-                  color: "rgba(100, 200, 255, 0.6)",
-                  "&:hover": {
-                    color: "rgba(100, 200, 255, 1)",
-                  },
-                }}
-              >
-                <SendIcon size={20} />
-              </IconButton>
-            ),
-          }}
+        <Box
           sx={{
-            width: "50%",
-            "& .MuiOutlinedInput-root": {
-              color: "#fff",
-              backgroundColor: "rgba(255, 255, 255, 0.05)",
-              borderRadius: "24px",
-              border: "1px solid rgba(100, 200, 255, 0.3)",
-              transition: "all 0.3s ease",
-              "& fieldset": {
-                borderColor: "rgba(100, 200, 255, 0.3)",
-              },
-              "&:hover fieldset": {
-                borderColor: "rgba(100, 200, 255, 0.6)",
-              },
-              "&.Mui-focused fieldset": {
-                borderColor: "rgba(100, 200, 255, 1)",
-              },
+            flex: 1,
+            overflowY: "auto",
+            display: "flex",
+            flexDirection: "column",
+            gap: 3,
+            pr: 2,
+            "&::-webkit-scrollbar": {
+              width: "6px",
             },
-            "& .MuiOutlinedInput-input": {
-              padding: "12px 16px",
-              fontSize: "0.95rem",
+            "&::-webkit-scrollbar-track": {
+              background: "rgba(255, 255, 255, 0.05)",
+              borderRadius: "10px",
             },
-            "& .MuiOutlinedInput-input::placeholder": {
-              color: "rgba(255, 255, 255, 0.4)",
-              opacity: 1,
+            "&::-webkit-scrollbar-thumb": {
+              background: "rgba(100, 200, 255, 0.3)",
+              borderRadius: "10px",
+              "&:hover": {
+                background: "rgba(100, 200, 255, 0.5)",
+              },
             },
           }}
-        />
+        >
+          {messages.length === 0 ? (
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                height: "100%",
+              }}
+            >
+              <Typography
+                variant="h6"
+                sx={{
+                  color: "rgba(255, 255, 255, 0.4)",
+                  textAlign: "center",
+                }}
+              >
+                Comece uma conversa...
+              </Typography>
+            </Box>
+          ) : (
+            messages.map((message) => (
+              <Box
+                key={message.id}
+                sx={{
+                  display: "flex",
+                  justifyContent:
+                    message.sender === "user" ? "flex-end" : "flex-start",
+                  animation: "slideIn 0.3s ease-in-out",
+                }}
+              >
+                <Paper
+                  sx={{
+                    maxWidth: "60%",
+                    p: "14px 20px",
+                    background:
+                      message.sender === "user"
+                        ? "linear-gradient(135deg, rgba(180, 100, 200, 0.4) 0%, rgba(100, 150, 200, 0.3) 100%)"
+                        : "linear-gradient(135deg, rgba(100, 150, 200, 0.4) 0%, rgba(100, 100, 150, 0.3) 100%)",
+                    border: "1px solid rgba(100, 200, 255, 0.3)",
+                    borderRadius:
+                      message.sender === "user"
+                        ? "20px 20px 4px 20px"
+                        : "20px 20px 20px 4px",
+                    boxShadow: "0 8px 24px rgba(0, 0, 0, 0.3)",
+                    position: "relative",
+                    right: "50px",
+                    backdropFilter: "blur(10px)",
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      color: "#fff",
+                      fontSize: "0.95rem",
+                      lineHeight: 1.5,
+                    }}
+                  >
+                    {message.text}
+                  </Typography>
+                  {message.sender === "user" && (
+                    <Box
+                      sx={{
+                        position: "absolute",
+                        bottom: 8,
+                        right: 12,
+                        display: "flex",
+                        gap: 0.5,
+                      }}
+                    >
+                      <CheckIcon size={14} color="rgba(100, 200, 255, 0.6)" />
+                    </Box>
+                  )}
+                </Paper>
+              </Box>
+            ))
+          )}
+        </Box>
+
+        <Box
+          sx={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <TextField
+            multiline
+            maxRows={4}
+            placeholder="Digite sua mensagem..."
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            onKeyPress={handleKeyPress}
+            InputProps={{
+              startAdornment: (
+                <IconButton
+                  size="small"
+                  sx={{
+                    mr: 1,
+                    color: "rgba(100, 200, 255, 0.6)",
+                    "&:hover": {
+                      color: "rgba(100, 200, 255, 1)",
+                    },
+                  }}
+                >
+                  <MicIcon size={20} />
+                </IconButton>
+              ),
+              endAdornment: (
+                <IconButton
+                  size="small"
+                  onClick={handleSendMessage}
+                  sx={{
+                    ml: 1,
+                    color: "rgba(100, 200, 255, 0.6)",
+                    "&:hover": {
+                      color: "rgba(100, 200, 255, 1)",
+                    },
+                  }}
+                >
+                  <SendIcon size={20} />
+                </IconButton>
+              ),
+            }}
+            sx={{
+              width: "50%",
+              "& .MuiOutlinedInput-root": {
+                color: "#fff",
+                backgroundColor: "rgba(255, 255, 255, 0.05)",
+                borderRadius: "24px",
+                border: "1px solid rgba(100, 200, 255, 0.3)",
+                transition: "all 0.3s ease",
+                "& fieldset": {
+                  borderColor: "rgba(100, 200, 255, 0.3)",
+                },
+                "&:hover fieldset": {
+                  borderColor: "rgba(100, 200, 255, 0.6)",
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: "rgba(100, 200, 255, 1)",
+                },
+              },
+              "& .MuiOutlinedInput-input": {
+                padding: "12px 16px",
+                fontSize: "0.95rem",
+              },
+              "& .MuiOutlinedInput-input::placeholder": {
+                color: "rgba(255, 255, 255, 0.4)",
+                opacity: 1,
+              },
+            }}
+          />
+        </Box>
       </Box>
+
+      <style>
+        {`
+          @keyframes slideIn {
+            from {
+              opacity: 0;
+              transform: translateY(10px);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
+          }
+        `}
+      </style>
     </Box>
   );
 };
