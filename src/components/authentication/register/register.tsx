@@ -1,7 +1,32 @@
 import { Link as RouterLink } from "react-router-dom";
 import { Box, Paper, Typography, TextField, Button, Link } from "@mui/material";
+import { useState } from "react";
+import { registerUser } from "../../../api/auth";
+import { useNavigate } from "react-router-dom";
 
-const Login = () => {
+const Register = () => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  async function handleRegister(e: any) {
+    e.preventDefault();
+    try {
+      const response = await registerUser(name, email, password);
+
+      console.log("✅ Resposta da API:", response);
+
+      const data = response.data; // ✅ token aqui
+
+      localStorage.setItem("token", data.token); // ✅ salva token
+
+      navigate("/home"); // ✅ redireciona
+    } catch (error) {
+      console.error("Erro no cadastro:", error);
+      alert("Erro ao cadastrar");
+    }
+  }
   return (
     <Box
       sx={{
@@ -10,7 +35,8 @@ const Login = () => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        background: "linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)",
+        background:
+          "linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)",
         overflow: "hidden",
         margin: 0,
         padding: 0,
@@ -23,9 +49,11 @@ const Login = () => {
           maxWidth: 420,
           p: 5,
           borderRadius: 3,
-          boxShadow: "0 20px 60px rgba(0, 0, 0, 0.8), inset 0 1px rgba(255, 255, 255, 0.1)",
+          boxShadow:
+            "0 20px 60px rgba(0, 0, 0, 0.8), inset 0 1px rgba(255, 255, 255, 0.1)",
           animation: "fadeIn 0.6s ease-in-out",
-          background: "linear-gradient(135deg, rgba(30, 30, 46, 0.95) 0%, rgba(20, 20, 35, 0.95) 100%)",
+          background:
+            "linear-gradient(135deg, rgba(30, 30, 46, 0.95) 0%, rgba(20, 20, 35, 0.95) 100%)",
           border: "1px solid rgba(255, 255, 255, 0.1)",
           backdropFilter: "blur(10px)",
         }}
@@ -41,7 +69,7 @@ const Login = () => {
             letterSpacing: 0.5,
           }}
         >
-          Bem-vindo
+          Criar Conta
         </Typography>
         <Typography
           variant="body2"
@@ -51,10 +79,43 @@ const Login = () => {
             color: "rgba(255, 255, 255, 0.6)",
           }}
         >
-          Faça login em sua conta
+          Junte-se a nós hoje
         </Typography>
 
         <form>
+          <TextField
+            label="Nome"
+            type="text"
+            fullWidth
+            margin="normal"
+            required
+            InputLabelProps={{
+              style: { color: "rgba(255, 255, 255, 0.7)", fontWeight: 500 },
+            }}
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                color: "#fff",
+                borderRadius: 2,
+                backgroundColor: "rgba(255, 255, 255, 0.05)",
+                transition: "all 0.3s ease",
+                "& fieldset": {
+                  borderColor: "rgba(255, 255, 255, 0.2)",
+                },
+                "&:hover fieldset": {
+                  borderColor: "rgba(100, 200, 255, 0.6)",
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: "rgba(100, 200, 255, 1)",
+                },
+              },
+              "& .MuiOutlinedInput-input": {
+                padding: "14px 16px",
+                fontSize: "1rem",
+              },
+            }}
+            onChange={(e) => setName(e.target.value)}
+          />
+
           <TextField
             label="Email"
             type="email"
@@ -84,11 +145,8 @@ const Login = () => {
                 padding: "14px 16px",
                 fontSize: "1rem",
               },
-              "& .MuiOutlinedInput-input::placeholder": {
-                color: "rgba(255, 255, 255, 0.4)",
-                opacity: 1,
-              },
             }}
+            onChange={(e) => setEmail(e.target.value)}
           />
 
           <TextField
@@ -121,6 +179,7 @@ const Login = () => {
                 fontSize: "1rem",
               },
             }}
+            onChange={(e) => setPassword(e.target.value)}
           />
 
           <Button
@@ -146,13 +205,14 @@ const Login = () => {
                 transform: "translateY(0)",
               },
             }}
+            onClick={handleRegister}
           >
-            Entrar
+            Cadastrar
           </Button>
 
           <Link
             component={RouterLink}
-            to="/register"
+            to="/login"
             sx={{
               display: "block",
               mt: 3,
@@ -167,26 +227,8 @@ const Login = () => {
             }}
           >
             <Typography variant="body2">
-              Ainda não tem uma conta? Cadastre-se
+              Já tem uma conta? Faça login
             </Typography>
-          </Link>
-
-          <Link
-            href="#"
-            sx={{
-              display: "block",
-              mt: 2,
-              textAlign: "center",
-              color: "rgba(255, 255, 255, 0.5)",
-              textDecoration: "none",
-              fontSize: "0.9rem",
-              transition: "color 0.3s ease",
-              "&:hover": {
-                color: "rgba(255, 255, 255, 0.8)",
-              },
-            }}
-          >
-            Esqueceu a senha?
           </Link>
         </form>
       </Paper>
@@ -216,4 +258,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;

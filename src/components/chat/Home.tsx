@@ -1,23 +1,7 @@
 import { useState } from "react";
-import {
-  Box,
-  Paper,
-  TextField,
-  IconButton,
-  Avatar,
-  Tooltip,
-  Typography,
-} from "@mui/material";
-import {
-  Home as HomeIcon,
-  Settings as SettingsIcon,
-  LogOut as LogOutIcon,
-  Send as SendIcon,
-  Mic as MicIcon,
-  Check as CheckIcon,
-  CircleFadingPlus,
-  CircleFadingPlusIcon,
-} from "lucide-react";
+import {  Box,  Paper,  TextField, IconButton, Avatar,Tooltip,Typography,} from "@mui/material";
+import { Home as HomeIcon,Settings as SettingsIcon, LogOut as LogOutIcon,Send as SendIcon, Mic as MicIcon, Check as CheckIcon, CircleFadingPlusIcon,} from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface Message {
   id: string;
@@ -29,6 +13,7 @@ interface Message {
 const Home = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState("");
+  const navigate = useNavigate();
 
   const handleSendMessage = () => {
     if (inputValue.trim()) {
@@ -141,7 +126,6 @@ const Home = () => {
               <CircleFadingPlusIcon size={24} />
             </IconButton>
           </Tooltip>
-
           <Tooltip title="Página Inicial">
             <IconButton
               sx={{
@@ -154,7 +138,6 @@ const Home = () => {
               <HomeIcon size={24} />
             </IconButton>
           </Tooltip>
-
           <Tooltip title="Configurações">
             <IconButton
               sx={{
@@ -170,6 +153,9 @@ const Home = () => {
 
           <Tooltip title="Sair">
             <IconButton
+              onClick={(e) => {
+                navigate("/login");
+              }}
               sx={{
                 color: "rgba(255, 255, 255, 0.5)",
                 "&:hover": {

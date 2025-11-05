@@ -1,7 +1,32 @@
 import { Link as RouterLink } from "react-router-dom";
 import { Box, Paper, Typography, TextField, Button, Link } from "@mui/material";
+import { useState } from "react";
+import { loginUser } from "../../../api/auth";
+import { useNavigate } from "react-router-dom";
 
-const Register = () => {
+const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  async function handleLogin(e: any) {
+    e.preventDefault();
+    try {
+      const response = await loginUser(email, password);
+
+      console.log("✅ Resposta da API:", response);
+
+      const data = response.data;
+
+      localStorage.setItem("token", data.token);
+
+      navigate("/home"); 
+    } catch (error) {
+      console.error("❌ Erro ao logar:", error);
+      alert("E-mail ou senha incorretos!");
+    }
+  }
+
   return (
     <Box
       sx={{
@@ -44,7 +69,7 @@ const Register = () => {
             letterSpacing: 0.5,
           }}
         >
-          Criar Conta
+          Bem-vindo
         </Typography>
         <Typography
           variant="body2"
@@ -54,42 +79,10 @@ const Register = () => {
             color: "rgba(255, 255, 255, 0.6)",
           }}
         >
-          Junte-se a nós hoje
+          Faça login em sua conta
         </Typography>
 
         <form>
-          <TextField
-            label="Nome"
-            type="text"
-            fullWidth
-            margin="normal"
-            required
-            InputLabelProps={{
-              style: { color: "rgba(255, 255, 255, 0.7)", fontWeight: 500 },
-            }}
-            sx={{
-              "& .MuiOutlinedInput-root": {
-                color: "#fff",
-                borderRadius: 2,
-                backgroundColor: "rgba(255, 255, 255, 0.05)",
-                transition: "all 0.3s ease",
-                "& fieldset": {
-                  borderColor: "rgba(255, 255, 255, 0.2)",
-                },
-                "&:hover fieldset": {
-                  borderColor: "rgba(100, 200, 255, 0.6)",
-                },
-                "&.Mui-focused fieldset": {
-                  borderColor: "rgba(100, 200, 255, 1)",
-                },
-              },
-              "& .MuiOutlinedInput-input": {
-                padding: "14px 16px",
-                fontSize: "1rem",
-              },
-            }}
-          />
-
           <TextField
             label="Email"
             type="email"
@@ -119,7 +112,12 @@ const Register = () => {
                 padding: "14px 16px",
                 fontSize: "1rem",
               },
+              "& .MuiOutlinedInput-input::placeholder": {
+                color: "rgba(255, 255, 255, 0.4)",
+                opacity: 1,
+              },
             }}
+            onChange={(e) => setEmail(e.target.value)}
           />
 
           <TextField
@@ -152,6 +150,7 @@ const Register = () => {
                 fontSize: "1rem",
               },
             }}
+            onChange={(e) => setPassword(e.target.value)}
           />
 
           <Button
@@ -177,13 +176,14 @@ const Register = () => {
                 transform: "translateY(0)",
               },
             }}
+            onClick={handleLogin}
           >
-            Cadastrar
+            Entrar
           </Button>
 
           <Link
             component={RouterLink}
-            to="/login"
+            to="/register"
             sx={{
               display: "block",
               mt: 3,
@@ -198,8 +198,26 @@ const Register = () => {
             }}
           >
             <Typography variant="body2">
-              Já tem uma conta? Faça login
+              Ainda não tem uma conta? Cadastre-se
             </Typography>
+          </Link>
+
+          <Link
+            href="#"
+            sx={{
+              display: "block",
+              mt: 2,
+              textAlign: "center",
+              color: "rgba(255, 255, 255, 0.5)",
+              textDecoration: "none",
+              fontSize: "0.9rem",
+              transition: "color 0.3s ease",
+              "&:hover": {
+                color: "rgba(255, 255, 255, 0.8)",
+              },
+            }}
+          >
+            Esqueceu a senha?
           </Link>
         </form>
       </Paper>
@@ -229,4 +247,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default Login;
