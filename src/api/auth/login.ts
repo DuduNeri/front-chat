@@ -1,4 +1,4 @@
-import { api } from "./conect";
+import { api } from "../conect";
 
 export async function registerUser(name: string, email: string, password: string) {
   const response = await api.post("/api/users/user", {

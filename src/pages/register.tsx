@@ -1,7 +1,7 @@
 import { Link as RouterLink } from "react-router-dom";
 import { Box, Paper, Typography, TextField, Button, Link } from "@mui/material";
 import { useState } from "react";
-import { registerUser } from "../../../api/auth";
+import { registerUser } from "../api/auth/login";
 import { useNavigate } from "react-router-dom";
 
 const Register = () => {
