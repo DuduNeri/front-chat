@@ -14,19 +14,15 @@ const Register = () => {
     e.preventDefault();
     try {
       const response = await registerUser(name, email, password);
-
-      console.log("✅ Resposta da API:", response);
-
-      const data = response.data; // ✅ token aqui
-
-      localStorage.setItem("token", data.token); // ✅ salva token
-
-      navigate("/home"); // ✅ redireciona
+      const data = response.data;
+      localStorage.setItem("token", data.token);
+      navigate("/home");
     } catch (error) {
       console.error("Erro no cadastro:", error);
       alert("Erro ao cadastrar");
     }
   }
+
   return (
     <Box
       sx={{
@@ -40,6 +36,7 @@ const Register = () => {
         overflow: "hidden",
         margin: 0,
         padding: 0,
+        "@media (max-width: 600px)": { padding: 2 },
       }}
     >
       <Paper
@@ -56,6 +53,7 @@ const Register = () => {
             "linear-gradient(135deg, rgba(30, 30, 46, 0.95) 0%, rgba(20, 20, 35, 0.95) 100%)",
           border: "1px solid rgba(255, 255, 255, 0.1)",
           backdropFilter: "blur(10px)",
+          "@media (max-width: 600px)": { maxWidth: "100%", p: 3 },
         }}
       >
         <Typography
@@ -67,6 +65,7 @@ const Register = () => {
             color: "#fff",
             fontWeight: 700,
             letterSpacing: 0.5,
+            fontSize: { xs: "1.8rem", sm: "2rem" },
           }}
         >
           Criar Conta
@@ -77,12 +76,14 @@ const Register = () => {
             textAlign: "center",
             mb: 4,
             color: "rgba(255, 255, 255, 0.6)",
+            fontSize: { xs: "0.9rem", sm: "1rem" },
           }}
         >
           Junte-se a nós hoje
         </Typography>
 
         <form>
+          {/* NOME */}
           <TextField
             label="Nome"
             type="text"
@@ -98,24 +99,16 @@ const Register = () => {
                 borderRadius: 2,
                 backgroundColor: "rgba(255, 255, 255, 0.05)",
                 transition: "all 0.3s ease",
-                "& fieldset": {
-                  borderColor: "rgba(255, 255, 255, 0.2)",
-                },
-                "&:hover fieldset": {
-                  borderColor: "rgba(100, 200, 255, 0.6)",
-                },
-                "&.Mui-focused fieldset": {
-                  borderColor: "rgba(100, 200, 255, 1)",
-                },
+                "& fieldset": { borderColor: "rgba(255, 255, 255, 0.2)" },
+                "&:hover fieldset": { borderColor: "rgba(100, 200, 255, 0.6)" },
+                "&.Mui-focused fieldset": { borderColor: "rgba(100, 200, 255, 1)" },
               },
-              "& .MuiOutlinedInput-input": {
-                padding: "14px 16px",
-                fontSize: "1rem",
-              },
+              "& .MuiOutlinedInput-input": { padding: "14px 16px", fontSize: "1rem" },
             }}
             onChange={(e) => setName(e.target.value)}
           />
 
+          {/* EMAIL */}
           <TextField
             label="Email"
             type="email"
@@ -131,24 +124,16 @@ const Register = () => {
                 borderRadius: 2,
                 backgroundColor: "rgba(255, 255, 255, 0.05)",
                 transition: "all 0.3s ease",
-                "& fieldset": {
-                  borderColor: "rgba(255, 255, 255, 0.2)",
-                },
-                "&:hover fieldset": {
-                  borderColor: "rgba(100, 200, 255, 0.6)",
-                },
-                "&.Mui-focused fieldset": {
-                  borderColor: "rgba(100, 200, 255, 1)",
-                },
+                "& fieldset": { borderColor: "rgba(255, 255, 255, 0.2)" },
+                "&:hover fieldset": { borderColor: "rgba(100, 200, 255, 0.6)" },
+                "&.Mui-focused fieldset": { borderColor: "rgba(100, 200, 255, 1)" },
               },
-              "& .MuiOutlinedInput-input": {
-                padding: "14px 16px",
-                fontSize: "1rem",
-              },
+              "& .MuiOutlinedInput-input": { padding: "14px 16px", fontSize: "1rem" },
             }}
             onChange={(e) => setEmail(e.target.value)}
           />
 
+          {/* SENHA */}
           <TextField
             label="Senha"
             type="password"
@@ -164,24 +149,16 @@ const Register = () => {
                 borderRadius: 2,
                 backgroundColor: "rgba(255, 255, 255, 0.05)",
                 transition: "all 0.3s ease",
-                "& fieldset": {
-                  borderColor: "rgba(255, 255, 255, 0.2)",
-                },
-                "&:hover fieldset": {
-                  borderColor: "rgba(100, 200, 255, 0.6)",
-                },
-                "&.Mui-focused fieldset": {
-                  borderColor: "rgba(100, 200, 255, 1)",
-                },
+                "& fieldset": { borderColor: "rgba(255, 255, 255, 0.2)" },
+                "&:hover fieldset": { borderColor: "rgba(100, 200, 255, 0.6)" },
+                "&.Mui-focused fieldset": { borderColor: "rgba(100, 200, 255, 1)" },
               },
-              "& .MuiOutlinedInput-input": {
-                padding: "14px 16px",
-                fontSize: "1rem",
-              },
+              "& .MuiOutlinedInput-input": { padding: "14px 16px", fontSize: "1rem" },
             }}
             onChange={(e) => setPassword(e.target.value)}
           />
 
+          {/* BOTÃO CADASTRAR */}
           <Button
             type="submit"
             fullWidth
@@ -201,15 +178,14 @@ const Register = () => {
                 boxShadow: "0 8px 30px rgba(100, 200, 255, 0.5)",
                 transform: "translateY(-2px)",
               },
-              "&:active": {
-                transform: "translateY(0)",
-              },
+              "&:active": { transform: "translateY(0)" },
             }}
             onClick={handleRegister}
           >
             Cadastrar
           </Button>
 
+          {/* LINK LOGIN */}
           <Link
             component={RouterLink}
             to="/login"
@@ -219,39 +195,23 @@ const Register = () => {
               textAlign: "center",
               color: "rgba(100, 200, 255, 0.8)",
               textDecoration: "none",
-              transition: "color 0.3s ease",
-              cursor: "pointer",
-              "&:hover": {
-                color: "rgba(100, 200, 255, 1)",
-              },
+              "&:hover": { color: "rgba(100, 200, 255, 1)" },
             }}
           >
-            <Typography variant="body2">
-              Já tem uma conta? Faça login
-            </Typography>
+            <Typography variant="body2">Já tem uma conta? Faça login</Typography>
           </Link>
         </form>
       </Paper>
 
+      {/* ANIMAÇÃO FADE IN */}
       <style>
         {`
           @keyframes fadeIn {
-            from {
-              opacity: 0;
-              transform: translateY(-20px) scale(0.95);
-            }
-            to {
-              opacity: 1;
-              transform: translateY(0) scale(1);
-            }
+            from { opacity: 0; transform: translateY(-20px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
           }
 
-          body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            overflow: hidden;
-          }
+          body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; }
         `}
       </style>
     </Box>

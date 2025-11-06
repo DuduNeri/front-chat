@@ -13,14 +13,10 @@ const Login = () => {
     e.preventDefault();
     try {
       const response = await loginUser(email, password);
-
-      console.log("✅ Resposta da API:", response);
-
       const data = response.data;
-
+      console.log("❄️",data)
       localStorage.setItem("token", data.token);
-
-      navigate("/home"); 
+      navigate("/home");
     } catch (error) {
       console.error("❌ Erro ao logar:", error);
       alert("E-mail ou senha incorretos!");
@@ -40,6 +36,7 @@ const Login = () => {
         overflow: "hidden",
         margin: 0,
         padding: 0,
+        "@media (max-width: 600px)": { padding: 2 },
       }}
     >
       <Paper
@@ -56,6 +53,7 @@ const Login = () => {
             "linear-gradient(135deg, rgba(30, 30, 46, 0.95) 0%, rgba(20, 20, 35, 0.95) 100%)",
           border: "1px solid rgba(255, 255, 255, 0.1)",
           backdropFilter: "blur(10px)",
+          "@media (max-width: 600px)": { maxWidth: "100%", p: 3 },
         }}
       >
         <Typography
@@ -67,92 +65,73 @@ const Login = () => {
             color: "#fff",
             fontWeight: 700,
             letterSpacing: 0.5,
+            fontSize: { xs: "1.8rem", sm: "2rem" },
           }}
         >
           Bem-vindo
         </Typography>
+
         <Typography
           variant="body2"
           sx={{
             textAlign: "center",
             mb: 4,
             color: "rgba(255, 255, 255, 0.6)",
+            fontSize: { xs: "0.9rem", sm: "1rem" },
           }}
         >
           Faça login em sua conta
         </Typography>
 
         <form>
+          {/* EMAIL */}
           <TextField
             label="Email"
             type="email"
             fullWidth
             margin="normal"
             required
-            InputLabelProps={{
-              style: { color: "rgba(255, 255, 255, 0.7)", fontWeight: 500 },
-            }}
+            InputLabelProps={{ style: { color: "rgba(255,255,255,0.7)", fontWeight: 500 } }}
             sx={{
               "& .MuiOutlinedInput-root": {
                 color: "#fff",
                 borderRadius: 2,
                 backgroundColor: "rgba(255, 255, 255, 0.05)",
                 transition: "all 0.3s ease",
-                "& fieldset": {
-                  borderColor: "rgba(255, 255, 255, 0.2)",
-                },
-                "&:hover fieldset": {
-                  borderColor: "rgba(100, 200, 255, 0.6)",
-                },
-                "&.Mui-focused fieldset": {
-                  borderColor: "rgba(100, 200, 255, 1)",
-                },
+                "& fieldset": { borderColor: "rgba(255, 255, 255, 0.2)" },
+                "&:hover fieldset": { borderColor: "rgba(100, 200, 255, 0.6)" },
+                "&.Mui-focused fieldset": { borderColor: "rgba(100, 200, 255, 1)" },
               },
-              "& .MuiOutlinedInput-input": {
-                padding: "14px 16px",
-                fontSize: "1rem",
-              },
-              "& .MuiOutlinedInput-input::placeholder": {
-                color: "rgba(255, 255, 255, 0.4)",
-                opacity: 1,
-              },
+              "& .MuiOutlinedInput-input": { padding: "14px 16px", fontSize: "1rem" },
+              "& .MuiOutlinedInput-input::placeholder": { color: "rgba(255,255,255,0.4)" },
             }}
             onChange={(e) => setEmail(e.target.value)}
           />
 
+          {/* SENHA */}
           <TextField
             label="Senha"
             type="password"
             fullWidth
             margin="normal"
             required
-            InputLabelProps={{
-              style: { color: "rgba(255, 255, 255, 0.7)", fontWeight: 500 },
-            }}
+            InputLabelProps={{ style: { color: "rgba(255,255,255,0.7)", fontWeight: 500 } }}
             sx={{
               "& .MuiOutlinedInput-root": {
                 color: "#fff",
                 borderRadius: 2,
                 backgroundColor: "rgba(255, 255, 255, 0.05)",
                 transition: "all 0.3s ease",
-                "& fieldset": {
-                  borderColor: "rgba(255, 255, 255, 0.2)",
-                },
-                "&:hover fieldset": {
-                  borderColor: "rgba(100, 200, 255, 0.6)",
-                },
-                "&.Mui-focused fieldset": {
-                  borderColor: "rgba(100, 200, 255, 1)",
-                },
+                "& fieldset": { borderColor: "rgba(255, 255, 255, 0.2)" },
+                "&:hover fieldset": { borderColor: "rgba(100, 200, 255, 0.6)" },
+                "&.Mui-focused fieldset": { borderColor: "rgba(100, 200, 255, 1)" },
               },
-              "& .MuiOutlinedInput-input": {
-                padding: "14px 16px",
-                fontSize: "1rem",
-              },
+              "& .MuiOutlinedInput-input": { padding: "14px 16px", fontSize: "1rem" },
             }}
             onChange={(e) => setPassword(e.target.value)}
           />
 
+          {/* BOTÃO ENTRAR */}
           <Button
             type="submit"
             fullWidth
@@ -166,21 +145,20 @@ const Login = () => {
               fontSize: "1rem",
               textTransform: "none",
               transition: "all 0.3s ease",
-              boxShadow: "0 4px 20px rgba(100, 200, 255, 0.3)",
+              boxShadow: "0 4px 20px rgba(100,200,255,0.3)",
               "&:hover": {
                 background: "linear-gradient(135deg, #7dd9ff 0%, #4bb0ff 100%)",
-                boxShadow: "0 8px 30px rgba(100, 200, 255, 0.5)",
+                boxShadow: "0 8px 30px rgba(100,200,255,0.5)",
                 transform: "translateY(-2px)",
               },
-              "&:active": {
-                transform: "translateY(0)",
-              },
+              "&:active": { transform: "translateY(0)" },
             }}
             onClick={handleLogin}
           >
             Entrar
           </Button>
 
+          {/* LINK CADASTRO */}
           <Link
             component={RouterLink}
             to="/register"
@@ -188,33 +166,25 @@ const Login = () => {
               display: "block",
               mt: 3,
               textAlign: "center",
-              color: "rgba(100, 200, 255, 0.8)",
+              color: "rgba(100,200,255,0.8)",
               textDecoration: "none",
-              transition: "color 0.3s ease",
-              cursor: "pointer",
-              "&:hover": {
-                color: "rgba(100, 200, 255, 1)",
-              },
+              "&:hover": { color: "rgba(100,200,255,1)" },
             }}
           >
-            <Typography variant="body2">
-              Ainda não tem uma conta? Cadastre-se
-            </Typography>
+            Ainda não tem uma conta? Cadastre-se
           </Link>
 
+          {/* LINK ESQUECEU SENHA */}
           <Link
             href="#"
             sx={{
               display: "block",
               mt: 2,
               textAlign: "center",
-              color: "rgba(255, 255, 255, 0.5)",
+              color: "rgba(255,255,255,0.5)",
               textDecoration: "none",
               fontSize: "0.9rem",
-              transition: "color 0.3s ease",
-              "&:hover": {
-                color: "rgba(255, 255, 255, 0.8)",
-              },
+              "&:hover": { color: "rgba(255,255,255,0.8)" },
             }}
           >
             Esqueceu a senha?
@@ -222,25 +192,14 @@ const Login = () => {
         </form>
       </Paper>
 
+      {/* ANIMAÇÃO FADE IN */}
       <style>
         {`
           @keyframes fadeIn {
-            from {
-              opacity: 0;
-              transform: translateY(-20px) scale(0.95);
-            }
-            to {
-              opacity: 1;
-              transform: translateY(0) scale(1);
-            }
+            from { opacity: 0; transform: translateY(-20px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
           }
-
-          body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            overflow: hidden;
-          }
+          body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; }
         `}
       </style>
     </Box>

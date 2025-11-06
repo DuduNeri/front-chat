@@ -385,18 +385,7 @@ const Home = () => {
                 height: '100%',
               }}
             >
-              <Box sx={{ textAlign: 'center' }}>
-                <Typography
-                  sx={{
-                    color: 'rgba(255, 255, 255, 0.35)',
-                    fontSize: { xs: '0.95rem', sm: '1.05rem', md: '1.25rem' },
-                    fontWeight: 500,
-                    letterSpacing: 0.3,
-                  }}
-                >
-                  Comece uma conversa...
-                </Typography>
-              </Box>
+
             </Box>
           ) : (
             messages.map((message) => (
