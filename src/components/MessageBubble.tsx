@@ -1,8 +1,8 @@
 import { Box, Paper, Typography } from "@mui/material";
 import { Check as CheckIcon } from "lucide-react";
-import { Message } from "./types";
+import { Messagelist } from "./types";
 
-export const MessageBubble = ({ message }: { message: Message }) => {
+export const MessageBubble = ({ message }: { message: Messagelist }) => {
   return (
     <Box
       sx={{

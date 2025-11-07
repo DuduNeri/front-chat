@@ -1,8 +1,8 @@
 import { Box, Typography } from "@mui/material";
 import { MessageBubble } from "./MessageBubble";
-import { Message } from "./types";
+import { Messagelist } from "./types";
 
-export const MessageList = ({ messages }: { messages: Message[] }) => {
+export const MessageList = ({ messages }: { messages: Messagelist[] }) => {
   return (
     <Box
       sx={{
