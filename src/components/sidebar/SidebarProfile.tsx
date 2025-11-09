@@ -39,7 +39,7 @@ export const SidebarProfile = ({ isMobile }: Props) => {
             color: "#fff",
           }}
         >
-          U
+          E
         </Avatar>
 
         {isMobile && (

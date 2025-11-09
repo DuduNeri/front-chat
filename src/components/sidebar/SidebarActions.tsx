@@ -42,7 +42,6 @@ export const SidebarActions = ({ isMobile }: Props) => {
         {/* Botão Home */}
         <Tooltip title="Página Inicial" placement="right">
           <IconButton
-            onClick={() => navigate("/")}
             sx={{
               width: isMobile ? "100%" : "auto",
               height: isMobile ? 40 : "auto",
@@ -71,7 +70,6 @@ export const SidebarActions = ({ isMobile }: Props) => {
         {/* Botão Configurações */}
         <Tooltip title="Configurações" placement="right">
           <IconButton
-            onClick={() => console.log("Ajustes")}
             sx={{
               width: isMobile ? "100%" : "auto",
               height: isMobile ? 40 : "auto",

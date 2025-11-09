@@ -15,8 +15,8 @@ export const SidebarChatList = ({ isMobile }: Props) => {
         width: isMobile ? "100%" : "auto",
       }}
     >
-      {[1, 2, 3].map((item) => (
-        <Tooltip key={item} title={`Chat ${item}`} placement="right">
+     
+        <Tooltip title="Chat">
           <IconButton
             sx={{
               width: isMobile ? "100%" : 48,
@@ -54,12 +54,11 @@ export const SidebarChatList = ({ isMobile }: Props) => {
                   fontWeight: 500,
                 }}
               >
-                Chat {item}
+                Chat 
               </Typography>
             )}
           </IconButton>
         </Tooltip>
-      ))}
     </Box>
   );
 };
