@@ -1,11 +1,13 @@
-// import { api } from "../conect";
+import { api } from "../conect";
 
-// export async function SendMessage(conversationId: string, content: string) {
-//   const token = localStorage.getItem("token");
+export async function SendMessage(conversationId: string, content: string) {
+  const token = localStorage.getItem("token");
 
-//   if (!token) throw new Error("Usuário não autenticado");
+  if (!token) throw new Error("Usuário não autenticado");
 
-//   const response = await api.post(
-//     "/api/messages"
-//   )
-// }
+  const response = await api.post("/api/messages", {
+    conversationId,
+    content,
+  });
+  return response;
+}
