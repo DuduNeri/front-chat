@@ -4,7 +4,6 @@ import { SidebarHeader } from "./SidebarHeader";
 import { SidebarProfile } from "./SidebarProfile";
 import { SidebarChatList } from "./SidebarChatList";
 import { SidebarActions } from "./SidebarActions";
-import { UsersearchBar } from "./UserSearchBar";
 
 interface Props {
   isMobile: boolean;
@@ -12,9 +11,6 @@ interface Props {
 }
 
 export const Sidebar = ({ isMobile, setSidebarOpen }: Props) => {
-  // ✅ Criando estado correto
-  const [searchValue, setSearchValue] = useState("");
-  const token = localStorage.getItem("token") || "";
 
   return (
     <Box
@@ -41,11 +37,6 @@ export const Sidebar = ({ isMobile, setSidebarOpen }: Props) => {
       <SidebarProfile isMobile={isMobile} />
       <SidebarChatList isMobile={isMobile} />
       <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
-        <UsersearchBar
-          value={searchValue}
-          onChange={setSearchValue}
-          token={token}
-        />
       </Box>
       <SidebarActions isMobile={isMobile} />
     </Box>

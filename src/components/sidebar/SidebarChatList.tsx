@@ -1,10 +1,35 @@
 import { Box, IconButton, Tooltip, Typography } from "@mui/material";
+import { getChat } from "../../api/chat/listChats";
+import { useEffect, useState } from "react";
 
 interface Props {
   isMobile: boolean;
 }
 
 export const SidebarChatList = ({ isMobile }: Props) => {
+  const [chats, setChats] = useState<any[]>([]);
+  const token = localStorage.getItem("token");
+  const userId = localStorage.getItem("userId");
+
+  useEffect(() => {
+    async function fetchChats() {
+      if (!token || !userId) {
+        console.log("Token ou ID do usuário não encontrado");
+        return;
+      }
+
+      try {
+        // ✅ Agora a ordem está correta
+        const data = await getChat(userId, token);
+        setChats(data);
+      } catch (error) {
+        console.error("Erro ao buscar conversas:", error);
+      }
+    }
+
+    fetchChats();
+  }, []); 
+
   return (
     <Box
       sx={{
@@ -15,50 +40,50 @@ export const SidebarChatList = ({ isMobile }: Props) => {
         width: isMobile ? "100%" : "auto",
       }}
     >
-     
-        <Tooltip title="Chat">
-          <IconButton
+      <Tooltip title="Chat">
+        <IconButton
+          sx={{
+            width: isMobile ? "100%" : 48,
+            height: isMobile ? 40 : 48,
+            borderRadius: isMobile ? 12 : "50%",
+            background: "rgba(100, 200, 255, 0.08)",
+            border: "1px solid rgba(100, 200, 255, 0.2)",
+            justifyContent: isMobile ? "flex-start" : "center",
+            pl: isMobile ? 1.5 : 0,
+            transition: "all 0.3s",
+            "&:hover": {
+              background: "rgba(100, 200, 255, 0.15)",
+              borderColor: "rgba(100, 200, 255, 0.5)",
+              transform: "translateY(-1px)",
+            },
+          }}
+          onClick={()=> {setChats}}
+        >
+          <Box
             sx={{
-              width: isMobile ? "100%" : 48,
-              height: isMobile ? 40 : 48,
-              borderRadius: isMobile ? 12 : "50%",
-              background: "rgba(100, 200, 255, 0.08)",
-              border: "1px solid rgba(100, 200, 255, 0.2)",
-              justifyContent: isMobile ? "flex-start" : "center",
-              pl: isMobile ? 1.5 : 0,
-              transition: "all 0.3s",
-              "&:hover": {
-                background: "rgba(100, 200, 255, 0.15)",
-                borderColor: "rgba(100, 200, 255, 0.5)",
-                transform: "translateY(-1px)",
-              },
+              width: isMobile ? 10 : 12,
+              height: isMobile ? 10 : 12,
+              borderRadius: "50%",
+              background:
+                "linear-gradient(135deg, rgba(100, 200, 255, 0.6), rgba(100, 180, 240, 0.4))",
+              mr: isMobile ? 1.5 : 0,
+              boxShadow: "0 0 12px rgba(100, 200, 255, 0.3)",
             }}
-          >
-            <Box
-              sx={{
-                width: isMobile ? 10 : 12,
-                height: isMobile ? 10 : 12,
-                borderRadius: "50%",
-                background:
-                  "linear-gradient(135deg, rgba(100, 200, 255, 0.6), rgba(100, 180, 240, 0.4))",
-                mr: isMobile ? 1.5 : 0,
-                boxShadow: "0 0 12px rgba(100, 200, 255, 0.3)",
-              }}
-            />
+          />
 
-            {isMobile && (
-              <Typography
-                sx={{
-                  color: "rgba(255, 255, 255, 0.75)",
-                  fontSize: "0.85rem",
-                  fontWeight: 500,
-                }}
-              >
-                Chat 
-              </Typography>
-            )}
-          </IconButton>
-        </Tooltip>
+          {isMobile && (
+            <Typography
+              sx={{
+                color: "rgba(255, 255, 255, 0.75)",
+                fontSize: "0.85rem",
+                fontWeight: 500,
+              }}
+            >
+              Chat
+            </Typography>
+          )}
+        </IconButton>
+      </Tooltip>
     </Box>
   );
 };

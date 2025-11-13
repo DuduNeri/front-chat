@@ -5,8 +5,9 @@ import {
   Settings as SettingsIcon,
   LogOut as LogOutIcon,
 } from "lucide-react";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { CreateRoomModal } from "../layouts/ModalChat";
+import { useState } from "react";
 
 interface Props {
   isMobile: boolean;
@@ -14,6 +15,7 @@ interface Props {
 
 export const SidebarActions = ({ isMobile }: Props) => {
   const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
 
   return (
     <>
@@ -28,6 +30,7 @@ export const SidebarActions = ({ isMobile }: Props) => {
         {/* Botão Criar Conversa */}
         <Tooltip title="Criar conversa" placement="right">
           <IconButton
+          onClick={() => setOpen(true)}
             disableRipple
             disableFocusRipple
             sx={{
@@ -123,6 +126,11 @@ export const SidebarActions = ({ isMobile }: Props) => {
             )}
           </IconButton>
         </Tooltip>
+        <CreateRoomModal
+        open={open}
+        onClose={() => setOpen(false)}
+        onSubmit={(data) => console.log(data)}
+      />
       </Box>
     </>
   );

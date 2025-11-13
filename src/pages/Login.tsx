@@ -14,7 +14,7 @@ const Login = () => {
     try {
       const response = await loginUser(email, password);
       const data = response.data;
-      console.log("❄️",data)
+      console.log("Sucesso ao logar no sistema👽",data)
       localStorage.setItem("token", data.token);
       navigate("/home");
     } catch (error) {
