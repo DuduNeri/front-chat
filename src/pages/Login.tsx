@@ -12,10 +12,7 @@ const Login = () => {
   async function handleLogin(e: any) {
     e.preventDefault();
     try {
-      const response = await loginUser(email, password);
-      const data = response.data;
-      console.log("Sucesso ao logar no sistema👽",data)
-      localStorage.setItem("token", data.token);
+      await loginUser(email, password);
       navigate("/home");
     } catch (error) {
       console.error("❌ Erro ao logar:", error);
@@ -75,18 +72,16 @@ const Login = () => {
           variant="body2"
           sx={{
             textAlign: "center",
-            mb: 4,
-            color: "rgba(255, 255, 255, 0.6)",
-            fontSize: { xs: "0.9rem", sm: "1rem" },
+            color: "rgba(255,255,255,0.7)",
+            mb: 3,
           }}
         >
-          Faça login em sua conta
+          Faça login para continuar
         </Typography>
 
-        <form>
-          {/* EMAIL */}
+        <form onSubmit={handleLogin}>
           <TextField
-            label="Email"
+            label="E-mail"
             type="email"
             fullWidth
             margin="normal"
@@ -103,12 +98,10 @@ const Login = () => {
                 "&.Mui-focused fieldset": { borderColor: "rgba(100, 200, 255, 1)" },
               },
               "& .MuiOutlinedInput-input": { padding: "14px 16px", fontSize: "1rem" },
-              "& .MuiOutlinedInput-input::placeholder": { color: "rgba(255,255,255,0.4)" },
             }}
             onChange={(e) => setEmail(e.target.value)}
           />
 
-          {/* SENHA */}
           <TextField
             label="Senha"
             type="password"
@@ -131,7 +124,6 @@ const Login = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
 
-          {/* BOTÃO ENTRAR */}
           <Button
             type="submit"
             fullWidth
@@ -153,12 +145,10 @@ const Login = () => {
               },
               "&:active": { transform: "translateY(0)" },
             }}
-            onClick={handleLogin}
           >
             Entrar
           </Button>
 
-          {/* LINK CADASTRO */}
           <Link
             component={RouterLink}
             to="/register"
@@ -174,7 +164,6 @@ const Login = () => {
             Ainda não tem uma conta? Cadastre-se
           </Link>
 
-          {/* LINK ESQUECEU SENHA */}
           <Link
             href="#"
             sx={{
@@ -192,7 +181,6 @@ const Login = () => {
         </form>
       </Paper>
 
-      {/* ANIMAÇÃO FADE IN */}
       <style>
         {`
           @keyframes fadeIn {

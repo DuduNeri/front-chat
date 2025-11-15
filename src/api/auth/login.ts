@@ -1,6 +1,10 @@
 import { api } from "../conect";
 
-export async function registerUser(name: string, email: string, password: string) {
+export async function registerUser(
+  name: string,
+  email: string,
+  password: string
+) {
   const response = await api.post("/api/users/user", {
     name,
     email,
@@ -10,11 +14,10 @@ export async function registerUser(name: string, email: string, password: string
 }
 
 export async function loginUser(email: string, password: string) {
-  const response = await api.post("/api/login", {
-    email,
-    password,
-  });
+  const response = await api.post("/api/login", { email, password });
 
   localStorage.setItem("token", response.data.token);
+  localStorage.setItem("userId", response.data.user.id); // 👈 falta isso
+
   return response;
 }

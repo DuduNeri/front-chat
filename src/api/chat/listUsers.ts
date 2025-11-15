@@ -1,15 +1,9 @@
-export async function listAllUsers(token: string) {
+import { api } from "../conect";
+
+export async function listAllUsers() {
   try {
-    const response = await fetch("http://localhost:4000/api/users", {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    if (!response.ok) throw new Error("Erro ao listar usuários");
-
-    return await response.json();
+    const response = await api.get("/api/users");
+    return response.data;
   } catch (error) {
     console.error("Erro listAllUsers:", error);
     return [];

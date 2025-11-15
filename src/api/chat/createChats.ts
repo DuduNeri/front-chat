@@ -1,26 +1,27 @@
 import { api } from "../conect";
-import { CreateConversationProps } from "../types/types";
 
 export async function createConversation({
   title,
   ownerId,
   participantId,
-}: CreateConversationProps & { ownerId: string }) {
-  const token = localStorage.getItem("token");
+}: {
+  title: string;
+  ownerId: string;
+  participantId: string; // <- você mandava isso
+}) {
+  try {
+    const response = await api.post("/api/conversation/sala", {
+      data: {
+        ownerId,
+        title,
+      },
+      participantId: [ownerId, participantId], 
+      // 👆 o backend espera array, então coloque os dois
+    });
 
-  if (!token) throw new Error("Usuário não autenticado");
-
-  const response = await api.post(
-    "/api/conversation/sala",
-    {
-      title,
-      ownerId,        
-      participantId,
-    },
-    {
-      headers: { Authorization: `Bearer ${token}` },
-    }
-  );
-
-  return response.data;
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao criar conversa:", error);
+    throw error;
+  }
 }

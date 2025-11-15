@@ -12,31 +12,30 @@ export const SidebarProfile = ({ isMobile }: Props) => {
           width: isMobile ? "100%" : 56,
           height: isMobile ? 44 : 56,
           borderRadius: isMobile ? 12 : "50%",
-          background:
-            "linear-gradient(135deg, rgba(100, 200, 255, 0.15) 0%, rgba(100, 150, 220, 0.1) 100%)",
-          border: "1.5px solid rgba(100, 200, 255, 0.4)",
           justifyContent: isMobile ? "flex-start" : "center",
-          pl: isMobile ? 1.5 : 0,
-          transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+          pl: isMobile ? 1.4 : 0,
+          transition: "all 0.25s ease",
           "&:hover": {
             background:
-              "linear-gradient(135deg, rgba(100, 200, 255, 0.25) 0%, rgba(100, 150, 220, 0.2) 100%)",
-            borderColor: "rgba(100, 200, 255, 0.7)",
+              "linear-gradient(135deg, rgba(100, 200, 255, 0.27), rgba(80, 150, 220, 0.22))",
+            borderColor: "rgba(100, 200, 255, 0.75)",
             transform: "translateY(-2px)",
-            boxShadow: "0 8px 24px rgba(100, 200, 255, 0.2)",
+            boxShadow: "0 0 14px rgba(100, 200, 255, 0.28)",
           },
         }}
       >
         <Avatar
           sx={{
-            width: isMobile ? 36 : 40,
-            height: isMobile ? 36 : 40,
+            width: isMobile ? 34 : 40,
+            height: isMobile ? 34 : 40,
             background:
-              "linear-gradient(135deg, rgba(100, 200, 255, 0.3), rgba(80, 180, 220, 0.2))",
-            fontSize: isMobile ? "0.9rem" : "1rem",
+              "linear-gradient(135deg, rgba(100, 200, 255, 0.35), rgba(80, 150, 220, 0.22))",
+            fontSize: isMobile ? "0.85rem" : "1rem",
             fontWeight: 700,
-            mr: isMobile ? 1.5 : 0,
+            mr: isMobile ? 1.4 : 0,
             color: "#fff",
+            letterSpacing: 0.5,
+            boxShadow: "0 0 6px rgba(100,200,255,0.55)",
           }}
         >
           E
@@ -45,10 +44,11 @@ export const SidebarProfile = ({ isMobile }: Props) => {
         {isMobile && (
           <Typography
             sx={{
-              color: "rgba(255, 255, 255, 0.9)",
+              color: "rgba(235, 245, 255, 0.92)",
               ml: 1,
               fontWeight: 600,
               fontSize: "0.95rem",
+              letterSpacing: 0.3,
             }}
           >
             Perfil

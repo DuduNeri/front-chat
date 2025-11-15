@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Box } from "@mui/material";
 import { SidebarHeader } from "./SidebarHeader";
 import { SidebarProfile } from "./SidebarProfile";
@@ -11,34 +10,50 @@ interface Props {
 }
 
 export const Sidebar = ({ isMobile, setSidebarOpen }: Props) => {
-
   return (
-    <Box
-      sx={{
-        width: isMobile ? "100%" : 100,
-        background:
-          "linear-gradient(180deg, rgba(30, 30, 46, 0.95) 0%, rgba(25, 25, 40, 0.95) 100%)",
-        borderRight: isMobile ? "none" : "1px solid rgba(100, 200, 255, 0.15)",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: isMobile ? "flex-start" : "center",
-        py: isMobile ? 2 : 3,
-        px: isMobile ? 2 : 7,
-        gap: isMobile ? 1 : 3,
-        height: "100%",
-        overflowY: "auto",
-        scrollbarWidth: "none"
-      }}
-    >
+   <Box
+  sx={{
+    width: isMobile ? "100%" : 200, // ← 🔥 AQUI aumentei a largura
+    height: "100vh",
+    display: "flex",
+    flexDirection: "column",
+    gap: isMobile ? 2 : 3,
+    py: isMobile ? 2 : 3,
+    px: isMobile ? 2 : 2,
+    borderRight: isMobile ? "none" : "1px solid rgba(100,200,255,0.18)",
+    alignItems: isMobile ? "flex-start" : "center",
+    overflowY: "auto",
+    scrollbarWidth: "none",
+
+    "&::-webkit-scrollbar": {
+      width: 0,
+    },
+  }}
+>
+
+      {/* 🔹 Header */}
       <SidebarHeader isMobile={isMobile} setSidebarOpen={setSidebarOpen} />
 
-      {/* ✅ SearchBar CORRETO — versão final */}
-
+      {/* 🔹 Profile */}
       <SidebarProfile isMobile={isMobile} />
+
+      {/* 🔹 Lista de Chats */}
       <SidebarChatList isMobile={isMobile} />
-      <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
-      </Box>
+
+      {/* 🔹 Ações */}
       <SidebarActions isMobile={isMobile} />
+
+      {/* 🔹 Linha de brilho inferior */}
+      <Box
+        sx={{
+          width: "100%",
+          height: 2,
+          background:
+            "linear-gradient(90deg, transparent, rgba(100,200,255,0.4), transparent)",
+          borderRadius: 10,
+          mt: 1,
+        }}
+      />
     </Box>
   );
 };

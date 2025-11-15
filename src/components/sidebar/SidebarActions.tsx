@@ -1,4 +1,4 @@
-import { Box, IconButton, Tooltip, Typography } from "@mui/material";
+import { Box, IconButton, Tooltip, Typography, useTheme } from "@mui/material";
 import {
   Plus as PlusIcon,
   Home as HomeIcon,
@@ -7,7 +7,8 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { CreateRoomModal } from "../layouts/ModalChat";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { createConversation } from "../../api/chat/createChats";
 
 interface Props {
   isMobile: boolean;
@@ -17,121 +18,156 @@ export const SidebarActions = ({ isMobile }: Props) => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
 
+  const handleCreateRoom = async ({
+    title,
+    participants,
+  }: {
+    title: string;
+    participants: string[];
+  }) => {
+    const ownerId = localStorage.getItem("userId");
+
+    if (!ownerId) {
+      alert("Usuário não identificado. Faça login novamente.");
+      return;
+    }
+
+    try {
+      await createConversation({
+        title,
+        ownerId,
+        participantId: participants[0],
+      });
+      setOpen(false);
+    } catch (err) {
+      console.error("Erro ao criar sala:", err);
+      alert("Erro ao criar sala");
+    }
+  };
+  useEffect(()=> {
+    handleCreateRoom
+  },[])
+
+  // Configurações de estilo centralizadas
+  const styles = {
+    container: {
+      display: "flex",
+      flexDirection: "column" as const,
+      gap: isMobile ? 1 : 2,
+      width: isMobile ? "100%" : "auto",
+      mt: 2,
+    },
+    button: {
+      transition: "all 0.2s ease-in-out",
+      justifyContent: isMobile ? "flex-start" : "center",
+      minHeight: 48,
+      borderRadius: 2,
+      px: isMobile ? 2 : 1,
+      "&:hover": {
+        transform: "translateX(4px)",
+        background: `rgba(100, 200, 255, 0.08)`,
+      },
+    },
+    primaryButton: {
+      color: "rgba(100, 200, 255, 0.95)",
+
+      "&:hover": {
+        background: "rgba(100, 200, 255, 0.12)",
+        color: "rgba(100, 200, 255, 1)",
+      },
+    },
+    standardButton: {
+      color: "rgba(220, 220, 230, 0.8)",
+      "&:hover": {
+        color: "rgba(100, 200, 255, 1)",
+      },
+    },
+    dangerButton: {
+      color: "rgba(255, 120, 120, 0.8)",
+      "&:hover": {
+        color: "rgba(255, 100, 100, 1)",
+      },
+    },
+    label: {
+      ml: 1.5,
+      fontSize: "0.9rem",
+      fontWeight: 500,
+      color: "inherit",
+    },
+  };
+
   return (
     <>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          gap: isMobile ? 0.75 : 2,
-          width: isMobile ? "100%" : "auto",
-        }}
-      >
-        {/* Botão Criar Conversa */}
+      <Box sx={styles.container}>
+        {/* Criar Conversa */}
         <Tooltip title="Criar conversa" placement="right">
           <IconButton
-          onClick={() => setOpen(true)}
             disableRipple
-            disableFocusRipple
+            onClick={() => setOpen(true)}
             sx={{
-              color: "rgba(100, 200, 255, 0.7)",
-              "&:hover": { color: "rgba(100, 200, 255, 0.9)" },
+              ...styles.button,
+              ...styles.primaryButton,
             }}
           >
-            <PlusIcon size={isMobile ? 20 : 24} />
+            <PlusIcon size={isMobile ? 20 : 22} />
+            {isMobile && (
+              <Typography sx={styles.label}>Nova conversa</Typography>
+            )}
           </IconButton>
         </Tooltip>
 
-        {/* Botão Home */}
+        {/* Home */}
         <Tooltip title="Página Inicial" placement="right">
           <IconButton
             sx={{
-              width: isMobile ? "100%" : "auto",
-              height: isMobile ? 40 : "auto",
-              justifyContent: isMobile ? "flex-start" : "center",
-              pl: isMobile ? 1.5 : 0,
-              color: "rgba(150, 150, 180, 0.7)",
-              "&:hover": { color: "rgba(100, 200, 255, 0.9)" },
+              ...styles.button,
+              ...styles.standardButton,
             }}
           >
-            <HomeIcon size={isMobile ? 20 : 24} />
-            {isMobile && (
-              <Typography
-                sx={{
-                  color: "rgba(255, 255, 255, 0.7)",
-                  ml: 1.5,
-                  fontSize: "0.85rem",
-                  fontWeight: 500,
-                }}
-              >
-                Home
-              </Typography>
-            )}
+            <HomeIcon size={isMobile ? 20 : 22} />
+            {isMobile && <Typography sx={styles.label}>Home</Typography>}
           </IconButton>
         </Tooltip>
 
-        {/* Botão Configurações */}
+        {/* Configurações */}
         <Tooltip title="Configurações" placement="right">
           <IconButton
             sx={{
-              width: isMobile ? "100%" : "auto",
-              height: isMobile ? 40 : "auto",
-              justifyContent: isMobile ? "flex-start" : "center",
-              pl: isMobile ? 1.5 : 0,
-              color: "rgba(150, 150, 180, 0.7)",
-              "&:hover": { color: "rgba(100, 200, 255, 0.9)" },
+              ...styles.button,
+              ...styles.standardButton,
             }}
           >
-            <SettingsIcon size={isMobile ? 20 : 24} />
+            <SettingsIcon size={isMobile ? 20 : 22} />
             {isMobile && (
-              <Typography
-                sx={{
-                  color: "rgba(255, 255, 255, 0.7)",
-                  ml: 1.5,
-                  fontSize: "0.85rem",
-                  fontWeight: 500,
-                }}
-              >
-                Ajustes
-              </Typography>
+              <Typography sx={styles.label}>Configurações</Typography>
             )}
           </IconButton>
         </Tooltip>
 
-        {/* Botão Sair */}
+        {/* Logout */}
         <Tooltip title="Sair" placement="right">
           <IconButton
-            onClick={() => navigate("/login")}
+            onClick={() => {
+              localStorage.removeItem("token");
+              localStorage.removeItem("userId");
+              navigate("/login");
+            }}
             sx={{
-              width: isMobile ? "100%" : "auto",
-              height: isMobile ? 40 : "auto",
-              justifyContent: isMobile ? "flex-start" : "center",
-              pl: isMobile ? 1.5 : 0,
-              color: "rgba(220, 120, 120, 0.6)",
-              "&:hover": { color: "rgba(255, 100, 100, 0.9)" },
+              ...styles.button,
+              ...styles.dangerButton,
             }}
           >
-            <LogOutIcon size={isMobile ? 20 : 24} />
-            {isMobile && (
-              <Typography
-                sx={{
-                  color: "rgba(255, 100, 100, 0.7)",
-                  ml: 1.5,
-                  fontSize: "0.85rem",
-                  fontWeight: 500,
-                }}
-              >
-                Sair
-              </Typography>
-            )}
+            <LogOutIcon size={isMobile ? 20 : 22} />
+            {isMobile && <Typography sx={styles.label}>Sair</Typography>}
           </IconButton>
         </Tooltip>
-        <CreateRoomModal
+      </Box>
+
+      <CreateRoomModal
         open={open}
         onClose={() => setOpen(false)}
-        onSubmit={(data) => console.log(data)}
+        onSubmit={handleCreateRoom}
       />
-      </Box>
     </>
   );
 };

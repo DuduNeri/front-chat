@@ -24,15 +24,17 @@ export const SidebarHeader = ({ isMobile, setSidebarOpen }: Props) => {
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
+        padding: "6px 4px 10px 4px",
         mb: 1,
       }}
     >
       <Typography
         sx={{
-          color: "#fff",
+          color: "#e8f6ff",
           fontWeight: 700,
           fontSize: "1.1rem",
-          letterSpacing: 0.5,
+          letterSpacing: 0.6,
+          textShadow: "0 0 8px rgba(100,200,255,0.35)",
         }}
       >
         Menu
@@ -43,8 +45,16 @@ export const SidebarHeader = ({ isMobile, setSidebarOpen }: Props) => {
         onClick={handleClose}
         sx={{
           color: "rgba(255, 255, 255, 0.6)",
-          transition: "all 0.2s",
-          p: 0.5,
+          transition: "all 0.25s ease",
+          p: 0.6,
+          borderRadius: "8px",
+          "&:hover": {
+            color: "#fff",
+            transform: "scale(1.07)",
+          },
+          "&:active": {
+            transform: "scale(0.94)",
+          },
         }}
       >
         <XIcon size={18} />
