@@ -13,6 +13,7 @@ const Login = () => {
     e.preventDefault();
     try {
       await loginUser(email, password);
+      console.log(loginUser)
       navigate("/home");
     } catch (error) {
       console.error("❌ Erro ao logar:", error);

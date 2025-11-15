@@ -10,14 +10,17 @@ export async function registerUser(
     email,
     password,
   });
+
   return response;
 }
 
 export async function loginUser(email: string, password: string) {
   const response = await api.post("/api/login", { email, password });
 
+  // ✔ Salva usuário, token e id no localStorage
+  localStorage.setItem("userName", response.data.user.name);
   localStorage.setItem("token", response.data.token);
-  localStorage.setItem("userId", response.data.user.id); // 👈 falta isso
+  localStorage.setItem("userId", response.data.user.id);
 
   return response;
 }

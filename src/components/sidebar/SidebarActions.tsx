@@ -44,13 +44,11 @@ export const SidebarActions = ({ isMobile }: Props) => {
       alert("Erro ao criar sala");
     }
   };
-  useEffect(()=> {
-    handleCreateRoom
-  },[createConversation])
 
+  useEffect(() => {
+    handleCreateRoom;
+  }, [createConversation]);
 
-
-  // Configurações de estilo centralizadas
   const styles = {
     container: {
       display: "flex",
@@ -61,10 +59,10 @@ export const SidebarActions = ({ isMobile }: Props) => {
     },
     button: {
       transition: "all 0.2s ease-in-out",
-      justifyContent: isMobile ? "flex-start" : "center",
+      justifyContent: "flex-start",
       minHeight: 48,
       borderRadius: 2,
-      px: isMobile ? 2 : 1,
+      px: 2,
       "&:hover": {
         transform: "translateX(4px)",
         background: `rgba(100, 200, 255, 0.08)`,
@@ -72,10 +70,8 @@ export const SidebarActions = ({ isMobile }: Props) => {
     },
     primaryButton: {
       color: "rgba(100, 200, 255, 0.95)",
-
       "&:hover": {
-        background: "rgba(100, 200, 255, 0.12)",
-        color: "rgba(100, 200, 255, 1)",
+      
       },
     },
     standardButton: {
@@ -106,43 +102,26 @@ export const SidebarActions = ({ isMobile }: Props) => {
           <IconButton
             disableRipple
             onClick={() => setOpen(true)}
-            sx={{
-              ...styles.button,
-              ...styles.primaryButton,
-            }}
+            sx={{ ...styles.button, ...styles.primaryButton }}
           >
-            <PlusIcon size={isMobile ? 20 : 22} />
-            {isMobile && (
-              <Typography sx={styles.label}>Nova conversa</Typography>
-            )}
+            <PlusIcon size={22} />
+            <Typography sx={styles.label}>Criar sala</Typography>
           </IconButton>
         </Tooltip>
 
         {/* Home */}
         <Tooltip title="Página Inicial" placement="right">
-          <IconButton
-            sx={{
-              ...styles.button,
-              ...styles.standardButton,
-            }}
-          >
-            <HomeIcon size={isMobile ? 20 : 22} />
-            {isMobile && <Typography sx={styles.label}>Home</Typography>}
+          <IconButton sx={{ ...styles.button, ...styles.standardButton }}>
+            <HomeIcon size={22} />
+            <Typography sx={styles.label}>Página inicial</Typography>
           </IconButton>
         </Tooltip>
 
         {/* Configurações */}
         <Tooltip title="Configurações" placement="right">
-          <IconButton
-            sx={{
-              ...styles.button,
-              ...styles.standardButton,
-            }}
-          >
-            <SettingsIcon size={isMobile ? 20 : 22} />
-            {isMobile && (
-              <Typography sx={styles.label}>Configurações</Typography>
-            )}
+          <IconButton sx={{ ...styles.button, ...styles.standardButton }}>
+            <SettingsIcon size={22} />
+            <Typography sx={styles.label}>Configurações</Typography>
           </IconButton>
         </Tooltip>
 
@@ -154,13 +133,10 @@ export const SidebarActions = ({ isMobile }: Props) => {
               localStorage.removeItem("userId");
               navigate("/login");
             }}
-            sx={{
-              ...styles.button,
-              ...styles.dangerButton,
-            }}
+            sx={{ ...styles.button, ...styles.dangerButton }}
           >
-            <LogOutIcon size={isMobile ? 20 : 22} />
-            {isMobile && <Typography sx={styles.label}>Sair</Typography>}
+            <LogOutIcon size={22} />
+            <Typography sx={styles.label}>Sair</Typography>
           </IconButton>
         </Tooltip>
       </Box>

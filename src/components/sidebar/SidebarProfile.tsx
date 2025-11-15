@@ -5,6 +5,9 @@ interface Props {
 }
 
 export const SidebarProfile = ({ isMobile }: Props) => {
+  const userName = localStorage.getItem("userName") || "";
+  const firstLetter = userName.charAt(0).toUpperCase();
+
   return (
     <Tooltip title="Perfil" placement="right">
       <IconButton
@@ -38,7 +41,7 @@ export const SidebarProfile = ({ isMobile }: Props) => {
             boxShadow: "0 0 6px rgba(100,200,255,0.55)",
           }}
         >
-          E
+          {firstLetter || "?"}
         </Avatar>
 
         {isMobile && (
@@ -51,7 +54,7 @@ export const SidebarProfile = ({ isMobile }: Props) => {
               letterSpacing: 0.3,
             }}
           >
-            Perfil
+            {userName || "Perfil"}
           </Typography>
         )}
       </IconButton>
