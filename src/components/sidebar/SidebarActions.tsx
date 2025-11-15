@@ -46,7 +46,9 @@ export const SidebarActions = ({ isMobile }: Props) => {
   };
   useEffect(()=> {
     handleCreateRoom
-  },[])
+  },[createConversation])
+
+
 
   // Configurações de estilo centralizadas
   const styles = {

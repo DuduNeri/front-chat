@@ -27,11 +27,14 @@ interface User {
 interface CreateRoomModalProps {
   open: boolean;
   onClose: () => void;
-    onRoomCreated?: () => void;  
   onSubmit: (data: { title: string; participants: string[] }) => void;
 }
 
-export const CreateRoomModal = ({ open, onClose, onSubmit }: CreateRoomModalProps) => {
+export const CreateRoomModal = ({
+  open,
+  onClose,
+  onSubmit,
+}: CreateRoomModalProps) => {
   const [title, setTitle] = useState("");
   const [users, setUsers] = useState<User[]>([]);
   const [search, setSearch] = useState("");
@@ -71,6 +74,10 @@ export const CreateRoomModal = ({ open, onClose, onSubmit }: CreateRoomModalProp
     onClose();
   };
 
+  const refresh = () => {
+    window.location.reload();
+  };
+
   return (
     <Modal
       open={open}
@@ -88,12 +95,12 @@ export const CreateRoomModal = ({ open, onClose, onSubmit }: CreateRoomModalProp
             transform: "translate(-50%, -50%)",
             width: "95%",
             maxWidth: 480,
-            bgcolor: "rgba(80, 139, 137, 0.92)",
-            backdropFilter: "blur(14px)",
+            background: "linear-gradient(135deg, #0a0a15, #1a1a2e, #16213e)",
             borderRadius: "18px",
             p: 4,
-            boxShadow: 10,
-            border: "1px solid rgba(255,255,255,0.08)",
+            boxShadow: "0 0 25px rgba(0,0,0,0.5)",
+            border: "1px solid rgba(255,255,255,0.06)",
+            backdropFilter: "blur(14px)",
           }}
         >
           {/* HEADER */}
@@ -105,12 +112,19 @@ export const CreateRoomModal = ({ open, onClose, onSubmit }: CreateRoomModalProp
               alignItems: "center",
             }}
           >
-            <Typography variant="h5" sx={{ color: "#fff", fontWeight: 600 }}>
+            <Typography variant="h5" sx={{ color: "#fff", fontWeight: 700 }}>
               Criar Nova Sala
             </Typography>
 
-            <IconButton onClick={onClose}>
-              <CloseIcon color="#ccc" size={22} />
+            <IconButton
+              onClick={onClose}
+              sx={{
+                color: "#bbb",
+                transition: "0.2s",
+                "&:hover": { color: "#fff" },
+              }}
+            >
+              <CloseIcon size={22} />
             </IconButton>
           </Box>
 
@@ -125,51 +139,125 @@ export const CreateRoomModal = ({ open, onClose, onSubmit }: CreateRoomModalProp
               mb: 2,
               "& .MuiOutlinedInput-root": {
                 color: "#fff",
-                backgroundColor: "rgba(240, 226, 226, 0.05)",
-                "& fieldset": { borderColor: "rgba(255, 255, 255, 0.15)" },
+                backgroundColor: "rgba(255,255,255,0.05)",
+                "& fieldset": {
+                  borderColor: "rgba(255, 255, 255, 0.1)",
+                },
+                "&:hover fieldset": {
+                  borderColor: "rgba(255,255,255,0.25)",
+                },
               },
             }}
           />
 
-          {/* BUSCA DE USUÁRIOS */}
+          {/* BUSCA */}
           <TextField
-            placeholder="Buscar usuários"
+            placeholder="Buscar usuários..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             fullWidth
             InputProps={{
+              style: { color: "#fff" },
               startAdornment: (
                 <InputAdornment position="start">
-                  <Search size={18} color="#aaa" />
+                  <Search size={18} color="#ccc" />
                 </InputAdornment>
               ),
             }}
-            sx={{ mb: 2 }}
+            sx={{
+              mb: 2,
+              "& .MuiOutlinedInput-root": {
+                backgroundColor: "rgba(255,255,255,0.04)",
+                "& fieldset": {
+                  borderColor: "rgba(255,255,255,0.1)",
+                },
+              },
+            }}
           />
 
-          {/* LISTA DE USUÁRIOS */}
+          {/* LISTA */}
           <List sx={{ maxHeight: 240, overflowY: "auto" }}>
             {filteredUsers.map((u) => (
-              <ListItemButton key={u.id} onClick={() => toggleUser(u)}>
-                <Avatar sx={{ mr: 2 }}>{u.name?.[0] || "U"}</Avatar>
-                <ListItemText primary={u.name} secondary={u.email} />
+              <ListItemButton
+                key={u.id}
+                onClick={() => toggleUser(u)}
+                sx={{
+                  borderRadius: "10px",
+                  mb: 1,
+                  backgroundColor: selectedUsers.some((s) => s.id === u.id)
+                    ? "rgba(255,255,255,0.12)"
+                    : "transparent",
+                  transition: "0.2s",
+                  "&:hover": {
+                    backgroundColor: "rgba(255,255,255,0.08)",
+                  },
+                }}
+              >
+                <Avatar sx={{ mr: 2, bgcolor: "#1e1e2e", color: "#fff" }}>
+                  {u.name?.[0] || "U"}
+                </Avatar>
+                <ListItemText
+                  primary={u.name}
+                  secondary={u.email}
+                  primaryTypographyProps={{ style: { color: "#fff" } }}
+                  secondaryTypographyProps={{ style: { color: "#aaa" } }}
+                />
               </ListItemButton>
             ))}
           </List>
 
-          {/* USUÁRIOS SELECIONADOS */}
+          {/* CHIPS */}
           <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap", mt: 2 }}>
             {selectedUsers.map((u) => (
-              <Chip key={u.id} label={u.name} onDelete={() => toggleUser(u)} />
+              <Chip
+                key={u.id}
+                label={u.name}
+                onDelete={() => toggleUser(u)}
+                sx={{
+                  backgroundColor: "rgba(255,255,255,0.12)",
+                  color: "#fff",
+                  "& .MuiChip-deleteIcon": { color: "#ccc" },
+                }}
+              />
             ))}
           </Box>
 
           {/* AÇÕES */}
-          <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 3, gap: 1 }}>
-            <Button variant="outlined" onClick={onClose}>
+          <Box
+            sx={{ display: "flex", justifyContent: "flex-end", mt: 3, gap: 1 }}
+          >
+            <Button
+              variant="outlined"
+              onClick={onClose}
+              sx={{
+                borderColor: "rgba(255,255,255,0.3)",
+                color: "#fff",
+                "&:hover": {
+                  borderColor: "#fff",
+                  backgroundColor: "rgba(255,255,255,0.1)",
+                },
+              }}
+            >
               Cancelar
             </Button>
-            <Button variant="contained" onClick={handleSubmit}>
+
+            <Button
+              variant="contained"
+              onClick={() => {
+                handleSubmit();
+                refresh();
+              }}
+              sx={{
+                background:
+                  "linear-gradient(135deg, #1a1a2e, #16213e, #0f0f1a)",
+                color: "#fff",
+                fontWeight: 600,
+                "&:hover": {
+                  background:
+                    "linear-gradient(135deg, #23233b, #1d2a4c, #151526)",
+                },
+              }}
+            >
               Criar sala
             </Button>
           </Box>

@@ -15,8 +15,8 @@ export async function createConversation({
         ownerId,
         title,
       },
-      participantId: [ownerId, participantId], 
-      // 👆 o backend espera array, então coloque os dois
+      participantId: [ownerId, participantId],
+      title,
     });
 
     return response.data;
