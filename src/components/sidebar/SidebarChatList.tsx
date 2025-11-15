@@ -16,7 +16,6 @@ export const SidebarChatList = ({ isMobile }: Props) => {
 
   const fetchChats = async () => {
     if (!token || !userId) {
-      setError("Sessão expirada. Faça login novamente.");
       return;
     }
 

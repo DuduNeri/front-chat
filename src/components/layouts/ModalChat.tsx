@@ -224,37 +224,66 @@ export const CreateRoomModal = ({
 
           {/* AÇÕES */}
           <Box
-            sx={{ display: "flex", justifyContent: "flex-end", mt: 3, gap: 1 }}
+            sx={{
+              display: "flex",
+              justifyContent: "flex-end",
+              mt: 3,
+              gap: 1.5,
+            }}
           >
+            {/* Botão Cancelar */}
             <Button
-              variant="outlined"
               onClick={onClose}
               sx={{
-                borderColor: "rgba(255,255,255,0.3)",
-                color: "#fff",
+                borderColor: "rgba(255,255,255,0.25)",
+                color: "rgba(148, 89, 89, 0.85)",
+                borderRadius: 2,
+                px: 2.5,
+                py: 1,
+                fontWeight: 500,
+                letterSpacing: 0.4,
+                transition: "all 0.25s ease",
+                backdropFilter: "blur(3px)",
+                background: "rgba(255,255,255,0.06)",
                 "&:hover": {
-                  borderColor: "#fff",
-                  backgroundColor: "rgba(255,255,255,0.1)",
+                  borderColor: "rgba(255,255,255,0.7)",
+                  background: "rgba(255,255,255,0.12)",
+                  color: "#ff8080ff",
+                  transform: "translateY(-2px)",
+                },
+                "&:active": {
+                  transform: "scale(0.97)",
                 },
               }}
             >
               Cancelar
             </Button>
 
+            {/* Botão Criar Sala */}
             <Button
-              variant="contained"
               onClick={() => {
                 handleSubmit();
                 refresh();
               }}
               sx={{
-                background:
-                  "linear-gradient(135deg, #1a1a2e, #16213e, #0f0f1a)",
-                color: "#fff",
-                fontWeight: 600,
+                borderColor: "rgba(255,255,255,0.25)",
+                color: "rgba(255,255,255,0.85)",
+                borderRadius: 2,
+                px: 2.5,
+                py: 1,
+                fontWeight: 500,
+                letterSpacing: 0.4,
+                transition: "all 0.25s ease",
+                backdropFilter: "blur(3px)",
+                background: "rgba(255,255,255,0.06)",
                 "&:hover": {
-                  background:
-                    "linear-gradient(135deg, #23233b, #1d2a4c, #151526)",
+                  borderColor: "rgba(255,255,255,0.7)",
+                  background: "rgba(255,255,255,0.12)",
+                  color: "#fff",
+                  transform: "translateY(-2px)",
+                },
+                "&:active": {
+                  transform: "scale(0.97)",
                 },
               }}
             >

@@ -98,7 +98,7 @@ export const SidebarActions = ({ isMobile }: Props) => {
     <>
       <Box sx={styles.container}>
         {/* Criar Conversa */}
-        <Tooltip title="Criar conversa" placement="right">
+        <Tooltip title="" placement="right">
           <IconButton
             disableRipple
             onClick={() => setOpen(true)}
