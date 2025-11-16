@@ -11,26 +11,25 @@ interface Props {
 
 export const Sidebar = ({ isMobile, setSidebarOpen }: Props) => {
   return (
-   <Box
-  sx={{
-    width: isMobile ? "100%" : 200, // ← 🔥 AQUI aumentei a largura
-    height: "100vh",
-    display: "flex",
-    flexDirection: "column",
-    gap: isMobile ? 2 : 3,
-    py: isMobile ? 2 : 3,
-    px: isMobile ? 2 : 2,
-    borderRight: isMobile ? "none" : "1px solid rgba(100,200,255,0.18)",
-    alignItems: isMobile ? "flex-start" : "center",
-    overflowY: "auto",
-    scrollbarWidth: "none",
+    <Box
+      sx={{
+        width: isMobile ? "100%" : 200, // ← 🔥 AQUI aumentei a largura
+        height: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        gap: isMobile ? 2 : 3,
+        py: isMobile ? 2 : 3,
+        px: isMobile ? 2 : 2,
+        borderRight: isMobile ? "none" : "1px solid rgba(100,200,255,0.18)",
+        alignItems: isMobile ? "flex-start" : "center",
+        overflowY: "auto",
+        scrollbarWidth: "none",
 
-    "&::-webkit-scrollbar": {
-      width: 0,
-    },
-  }}
->
-
+        "&::-webkit-scrollbar": {
+          width: 0,
+        },
+      }}
+    >
       {/* 🔹 Header */}
       <SidebarHeader isMobile={isMobile} setSidebarOpen={setSidebarOpen} />
 

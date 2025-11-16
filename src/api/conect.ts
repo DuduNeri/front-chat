@@ -8,7 +8,6 @@ api.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
 
   if (token) {
-    // Garante headers e compatibilidade com Axios v1 (AxiosHeaders ou objeto)
     config.headers = config.headers ?? {};
     const headers: any = config.headers;
     if (typeof headers.set === "function") {

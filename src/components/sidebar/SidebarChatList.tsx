@@ -1,6 +1,7 @@
-import { Box, IconButton, Tooltip, Typography } from "@mui/material";
+import { Box, IconButton, Typography } from "@mui/material";
 import { getChatsByUser } from "../../api/chat/listChats";
 import { useEffect, useState } from "react";
+import { getConversation } from "../../api/chat/listChat";
 
 interface Props {
   isMobile: boolean;
@@ -10,6 +11,7 @@ export const SidebarChatList = ({ isMobile }: Props) => {
   const [chats, setChats] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [selectedConversation, setSelectedConversation] = useState<any>(null);
 
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
@@ -24,7 +26,7 @@ export const SidebarChatList = ({ isMobile }: Props) => {
       setError(null);
 
       const data = await getChatsByUser(userId);
-      console.log("Array de conversas",data);
+      console.log("Array de conversas", data);
       setChats(data);
     } catch (e) {
       console.error("Erro ao carregar conversas:", e);
@@ -48,7 +50,7 @@ export const SidebarChatList = ({ isMobile }: Props) => {
         width: "100%",
         p: 1,
         borderRadius: 2,
-     
+
         backdropFilter: "blur(6px)",
       }}
     >
@@ -124,7 +126,11 @@ export const SidebarChatList = ({ isMobile }: Props) => {
                   }}
                 />
 
-                <Typography
+                <IconButton
+                  onClick={async () => {
+                    const data = await getConversation(chat.id);
+                    setSelectedConversation(data);
+                  }}
                   sx={{
                     color: "#e9f7ff",
                     fontSize: "0.92rem",
@@ -136,7 +142,7 @@ export const SidebarChatList = ({ isMobile }: Props) => {
                   }}
                 >
                   {chat.title || chat.name || "Chat"}
-                </Typography>
+                </IconButton>
               </Box>
             ))}
       </Box>

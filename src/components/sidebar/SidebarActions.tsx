@@ -69,9 +69,9 @@ export const SidebarActions = ({ isMobile }: Props) => {
       },
     },
     primaryButton: {
-      color: "rgba(100, 200, 255, 0.95)",
+      color: "rgba(220, 220, 230, 0.8)",
       "&:hover": {
-      
+        color: "rgba(100, 255, 255, 1)",
       },
     },
     standardButton: {

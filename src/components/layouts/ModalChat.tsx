@@ -17,6 +17,7 @@ import {
 } from "@mui/material";
 import { X as CloseIcon, Search } from "lucide-react";
 import { listAllUsers } from "../../api/chat/listUsers";
+import AddReactionIcon from "@mui/icons-material/AddReaction";
 
 interface User {
   id: string;
@@ -39,6 +40,7 @@ export const CreateRoomModal = ({
   const [users, setUsers] = useState<User[]>([]);
   const [search, setSearch] = useState("");
   const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
+  const isDisabled = title.trim().length === 0;
 
   useEffect(() => {
     if (open) {
@@ -63,6 +65,10 @@ export const CreateRoomModal = ({
   );
 
   const handleSubmit = () => {
+    if (!title.trim()) {
+      alert("O nome da sala é obrigatório!");
+      return;
+    }
     onSubmit({
       title,
       participants: selectedUsers.map((u) => u.id),
@@ -98,7 +104,7 @@ export const CreateRoomModal = ({
             background: "linear-gradient(135deg, #0a0a15, #1a1a2e, #16213e)",
             borderRadius: "18px",
             p: 4,
-            boxShadow: "0 0 25px rgba(0,0,0,0.5)",
+            boxShadow: "0 0 25px rgba(0, 0, 0, 0.5)",
             border: "1px solid rgba(255,255,255,0.06)",
             backdropFilter: "blur(14px)",
           }}
@@ -174,6 +180,17 @@ export const CreateRoomModal = ({
               },
             }}
           />
+          <Typography
+            sx={{
+              fontFamily: "inherit",
+              color: "#fff",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            Clique para adicionar usuários ao chat
+            <AddReactionIcon sx={{ ml: 1 }} />
+          </Typography>
 
           {/* LISTA */}
           <List sx={{ maxHeight: 240, overflowY: "auto" }}>
@@ -205,6 +222,17 @@ export const CreateRoomModal = ({
               </ListItemButton>
             ))}
           </List>
+          <Typography
+            variant="h5"
+            sx={{
+              color: "#ff9393ff",
+              fontSize: "15px",
+              opacity: isDisabled ? 1 : 0.5, // invertido
+              cursor: isDisabled ? "pointer" : "not-allowed", // invertido
+            }}
+          >
+            🔒 O nome da sala é obrigatório
+          </Typography>
 
           {/* CHIPS */}
           <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap", mt: 2 }}>
@@ -236,9 +264,9 @@ export const CreateRoomModal = ({
               onClick={onClose}
               sx={{
                 borderColor: "rgba(255,255,255,0.25)",
-                color: "rgba(148, 89, 89, 0.85)",
+                color: "rgba(224, 99, 99, 0.85)",
                 borderRadius: 2,
-                px: 2.5,
+                px: 7,
                 py: 1,
                 fontWeight: 500,
                 letterSpacing: 0.4,
@@ -261,30 +289,32 @@ export const CreateRoomModal = ({
 
             {/* Botão Criar Sala */}
             <Button
+              disabled={isDisabled}
               onClick={() => {
                 handleSubmit();
                 refresh();
               }}
               sx={{
+                opacity: isDisabled ? 0.5 : 1,
+                cursor: isDisabled ? "not-allowed" : "pointer",
                 borderColor: "rgba(255,255,255,0.25)",
-                color: "rgba(255,255,255,0.85)",
+                color: "rgba(118, 225, 252, 0.85)",
                 borderRadius: 2,
-                px: 2.5,
+                px: 7,
                 py: 1,
                 fontWeight: 500,
                 letterSpacing: 0.4,
                 transition: "all 0.25s ease",
                 backdropFilter: "blur(3px)",
                 background: "rgba(255,255,255,0.06)",
-                "&:hover": {
-                  borderColor: "rgba(255,255,255,0.7)",
-                  background: "rgba(255,255,255,0.12)",
-                  color: "#fff",
-                  transform: "translateY(-2px)",
-                },
-                "&:active": {
-                  transform: "scale(0.97)",
-                },
+                "&:hover": !isDisabled
+                  ? {
+                      borderColor: "rgba(255,255,255,0.7)",
+                      background: "rgba(255,255,255,0.12)",
+                      color: "#54e2e2ff",
+                      transform: "translateY(-2px)",
+                    }
+                  : undefined,
               }}
             >
               Criar sala

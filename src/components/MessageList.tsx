@@ -38,10 +38,10 @@ export const MessageList = ({ messages }: { messages: Messagelist[] }) => {
             height: "100%",
             textAlign: "center",
             px: 2,
-            animation: "fadeIn 1.2s ease",
+            animation: "fadeIn 1s ease",
             "@keyframes fadeIn": {
               from: { opacity: 0, transform: "translateY(10px)" },
-              to: { opacity: 1, transform: "translateY(0)" },
+              to: { opacity: 1, transform: "translateY()" },
             },
           }}
         >

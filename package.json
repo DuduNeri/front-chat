@@ -14,7 +14,7 @@
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@mui/icons-material": "^7.3.5",
-    "@mui/material": "^7.3.4",
+    "@mui/material": "^7.3.5",
     "@supabase/supabase-js": "^2.57.4",
     "@types/jsonwebtoken": "^9.0.10",
     "axios": "^1.13.2",
