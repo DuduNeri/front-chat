@@ -10,11 +10,7 @@ export const SidebarHeader = ({ isMobile, setSidebarOpen }: Props) => {
   if (!isMobile) return null;
 
   const handleClose = () => {
-    if (setSidebarOpen) {
-      setSidebarOpen(false);
-    } else {
-      console.warn("setSidebarOpen não foi passado para o SidebarHeader!");
-    }
+    setSidebarOpen?.(false);
   };
 
   return (
@@ -24,40 +20,50 @@ export const SidebarHeader = ({ isMobile, setSidebarOpen }: Props) => {
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        padding: "6px 4px 10px 4px",
-        mb: 1,
+        px: 1,
+        py: 1.4,
+        mb: 1.5,
+        borderBottom: "1px solid rgba(120,200,255,0.15)",
+        backdropFilter: "blur(4px)",
       }}
     >
+      {/* --- TÍTULO --- */}
       <Typography
         sx={{
-          color: "#e8f6ff",
+          color: "#dff7ff",
           fontWeight: 700,
-          fontSize: "1.1rem",
-          letterSpacing: 0.6,
-          textShadow: "0 0 8px rgba(100,200,255,0.35)",
+          fontSize: "1.15rem",
+          letterSpacing: 0.7,
+          textShadow: "0 0 10px rgba(100,200,255,0.35)",
         }}
       >
         Menu
       </Typography>
 
+      {/* --- BOTÃO FECHAR --- */}
       <IconButton
         size="small"
         onClick={handleClose}
         sx={{
-          color: "rgba(255, 255, 255, 0.6)",
-          transition: "all 0.25s ease",
-          p: 0.6,
-          borderRadius: "8px",
+          color: "rgba(255,255,255,0.65)",
+          p: 0.7,
+          borderRadius: "10px",
+          transition: "0.25s ease",
+          background: "rgba(255,255,255,0.05)",
+
           "&:hover": {
             color: "#fff",
-            transform: "scale(1.07)",
+            background: "rgba(255,255,255,0.12)",
+            transform: "scale(1.1)",
+            boxShadow: "0 0 8px rgba(100,200,255,0.4)",
           },
+
           "&:active": {
-            transform: "scale(0.94)",
+            transform: "scale(0.92)",
           },
         }}
       >
-        <XIcon size={18} />
+        <XIcon size={19} />
       </IconButton>
     </Box>
   );

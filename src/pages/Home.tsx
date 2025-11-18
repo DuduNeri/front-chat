@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Box, useMediaQuery, useTheme } from "@mui/material";
-
 import { Sidebar } from "../components/sidebar/Sidebar";
 import { MessageList } from "../components/MessageList";
 import { MessageInput } from "../components/MessageInput";

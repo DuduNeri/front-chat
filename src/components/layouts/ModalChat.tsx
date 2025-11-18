@@ -100,13 +100,18 @@ export const CreateRoomModal = ({
             left: "50%",
             transform: "translate(-50%, -50%)",
             width: "95%",
-            maxWidth: 480,
-            background: "linear-gradient(135deg, #0a0a15, #1a1a2e, #16213e)",
-            borderRadius: "18px",
+            maxWidth: 520,
+            background: "linear-gradient(145deg, #0b0b11, #121222, #1a1a33)",
+            borderRadius: "22px",
             p: 4,
-            boxShadow: "0 0 25px rgba(0, 0, 0, 0.5)",
-            border: "1px solid rgba(255,255,255,0.06)",
-            backdropFilter: "blur(14px)",
+            boxShadow: "0 0 35px rgba(0,0,0,0.65)",
+            border: "1px solid rgba(255,255,255,0.08)",
+            backdropFilter: "blur(18px)",
+            animation: "modalBounce .35s ease",
+            "@keyframes modalBounce": {
+              from: { transform: "translate(-50%, -48%) scale(0.97)" },
+              to: { transform: "translate(-50%, -50%) scale(1)" },
+            },
           }}
         >
           {/* HEADER */}
@@ -118,36 +123,48 @@ export const CreateRoomModal = ({
               alignItems: "center",
             }}
           >
-            <Typography variant="h5" sx={{ color: "#fff", fontWeight: 700 }}>
+            <Typography
+              variant="h5"
+              sx={{
+                color: "#80e9ff",
+                fontWeight: 700,
+                letterSpacing: 0.5,
+                textShadow: "0 0 8px rgba(100, 200, 255, 0.4)",
+              }}
+            >
               Criar Nova Sala
             </Typography>
 
             <IconButton
               onClick={onClose}
               sx={{
-                color: "#bbb",
-                transition: "0.2s",
-                "&:hover": { color: "#fff" },
+                color: "#aaa",
+                transition: "0.25s",
+                "&:hover": {
+                  color: "#fff",
+                  transform: "rotate(90deg)",
+                },
               }}
             >
               <CloseIcon size={22} />
             </IconButton>
           </Box>
 
-          {/* NOME DA SALA */}
+          {/* INPUT NOME */}
           <TextField
             label="Nome da Sala"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             fullWidth
-            InputLabelProps={{ style: { color: "#aaa" } }}
+            InputLabelProps={{ style: { color: "#b5b5b5" } }}
             sx={{
               mb: 2,
               "& .MuiOutlinedInput-root": {
-                color: "#fff",
-                backgroundColor: "rgba(255,255,255,0.05)",
+                color: "#e8e8e8",
+                backgroundColor: "rgba(255,255,255,0.06)",
+                borderRadius: "10px",
                 "& fieldset": {
-                  borderColor: "rgba(255, 255, 255, 0.1)",
+                  borderColor: "rgba(255,255,255,0.12)",
                 },
                 "&:hover fieldset": {
                   borderColor: "rgba(255,255,255,0.25)",
@@ -173,69 +190,107 @@ export const CreateRoomModal = ({
             sx={{
               mb: 2,
               "& .MuiOutlinedInput-root": {
-                backgroundColor: "rgba(255,255,255,0.04)",
+                backgroundColor: "rgba(255,255,255,0.05)",
+                borderRadius: "10px",
                 "& fieldset": {
-                  borderColor: "rgba(255,255,255,0.1)",
+                  borderColor: "rgba(255,255,255,0.12)",
                 },
               },
             }}
           />
+
           <Typography
             sx={{
               fontFamily: "inherit",
-              color: "#fff",
+              color: "#cfcfcf",
               display: "flex",
               alignItems: "center",
+              mb: 1,
+              fontSize: "14px",
             }}
           >
             Clique para adicionar usuários ao chat
-            <AddReactionIcon sx={{ ml: 1 }} />
+            <AddReactionIcon sx={{ ml: 1, color: "#80e9ff" }} />
           </Typography>
 
-          {/* LISTA */}
-          <List sx={{ maxHeight: 240, overflowY: "auto" }}>
+          {/* LISTA USERS */}
+          <List
+            sx={{
+              maxHeight: 240,
+              overflowY: "auto",
+              pr: 1,
+              "&::-webkit-scrollbar": {
+                width: "6px",
+              },
+              "&::-webkit-scrollbar-thumb": {
+                background: "rgba(255,255,255,0.15)",
+                borderRadius: "6px",
+              },
+            }}
+          >
             {filteredUsers.map((u) => (
               <ListItemButton
                 key={u.id}
                 onClick={() => toggleUser(u)}
                 sx={{
-                  borderRadius: "10px",
+                  borderRadius: "12px",
                   mb: 1,
                   backgroundColor: selectedUsers.some((s) => s.id === u.id)
-                    ? "rgba(255,255,255,0.12)"
+                    ? "rgba(120,220,255,0.12)"
                     : "transparent",
-                  transition: "0.2s",
+                  transition: "0.25s",
                   "&:hover": {
                     backgroundColor: "rgba(255,255,255,0.08)",
                   },
                 }}
               >
-                <Avatar sx={{ mr: 2, bgcolor: "#1e1e2e", color: "#fff" }}>
-                  {u.name?.[0] || "U"}
+                <Avatar
+                  sx={{
+                    mr: 2,
+                    bgcolor: "#1e1e2e",
+                    border: "1px solid rgba(255,255,255,0.1)",
+                    color: "#fff",
+                  }}
+                >
+                  {u.name?.[0]?.toUpperCase() || "U"}
                 </Avatar>
                 <ListItemText
                   primary={u.name}
                   secondary={u.email}
-                  primaryTypographyProps={{ style: { color: "#fff" } }}
-                  secondaryTypographyProps={{ style: { color: "#aaa" } }}
+                  primaryTypographyProps={{
+                    style: { color: "#fff", fontWeight: 500 },
+                  }}
+                  secondaryTypographyProps={{
+                    style: { color: "#b3b3b3", fontSize: "13px" },
+                  }}
                 />
               </ListItemButton>
             ))}
           </List>
+
+          {/* TEXTO OBRIGATÓRIO */}
           <Typography
             variant="h5"
             sx={{
-              color: "#ff9393ff",
+              color: "#ff8787",
               fontSize: "15px",
-              opacity: isDisabled ? 1 : 0.5, // invertido
-              cursor: isDisabled ? "pointer" : "not-allowed", // invertido
+              opacity: isDisabled ? 1 : 0.5,
+              mt: 1,
+              userSelect: "none",
             }}
           >
             🔒 O nome da sala é obrigatório
           </Typography>
 
           {/* CHIPS */}
-          <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap", mt: 2 }}>
+          <Box
+            sx={{
+              display: "flex",
+              gap: 1,
+              flexWrap: "wrap",
+              mt: 2,
+            }}
+          >
             {selectedUsers.map((u) => (
               <Chip
                 key={u.id}
@@ -244,13 +299,14 @@ export const CreateRoomModal = ({
                 sx={{
                   backgroundColor: "rgba(255,255,255,0.12)",
                   color: "#fff",
+                  borderRadius: "8px",
                   "& .MuiChip-deleteIcon": { color: "#ccc" },
                 }}
               />
             ))}
           </Box>
 
-          {/* AÇÕES */}
+          {/* BOTÕES */}
           <Box
             sx={{
               display: "flex",
@@ -259,35 +315,31 @@ export const CreateRoomModal = ({
               gap: 1.5,
             }}
           >
-            {/* Botão Cancelar */}
+            {/* Cancelar */}
             <Button
               onClick={onClose}
               sx={{
                 borderColor: "rgba(255,255,255,0.25)",
                 color: "rgba(224, 99, 99, 0.85)",
-                borderRadius: 2,
+                borderRadius: "10px",
                 px: 7,
                 py: 1,
                 fontWeight: 500,
                 letterSpacing: 0.4,
-                transition: "all 0.25s ease",
-                backdropFilter: "blur(3px)",
                 background: "rgba(255,255,255,0.06)",
+                transition: "0.25s ease",
                 "&:hover": {
-                  borderColor: "rgba(255,255,255,0.7)",
+                  borderColor: "rgba(255,255,255,0.6)",
                   background: "rgba(255,255,255,0.12)",
-                  color: "#ff8080ff",
+                  color: "#ff8080",
                   transform: "translateY(-2px)",
-                },
-                "&:active": {
-                  transform: "scale(0.97)",
                 },
               }}
             >
               Cancelar
             </Button>
 
-            {/* Botão Criar Sala */}
+            {/* Criar sala */}
             <Button
               disabled={isDisabled}
               onClick={() => {
@@ -297,22 +349,22 @@ export const CreateRoomModal = ({
               sx={{
                 opacity: isDisabled ? 0.5 : 1,
                 cursor: isDisabled ? "not-allowed" : "pointer",
-                borderColor: "rgba(255,255,255,0.25)",
-                color: "rgba(118, 225, 252, 0.85)",
-                borderRadius: 2,
+                color: "#80e9ff",
+                borderRadius: "10px",
                 px: 7,
                 py: 1,
-                fontWeight: 500,
+                fontWeight: 600,
                 letterSpacing: 0.4,
-                transition: "all 0.25s ease",
-                backdropFilter: "blur(3px)",
                 background: "rgba(255,255,255,0.06)",
+                border: "1px solid rgba(255,255,255,0.25)",
+                transition: "0.25s ease",
                 "&:hover": !isDisabled
                   ? {
-                      borderColor: "rgba(255,255,255,0.7)",
+                      borderColor: "rgba(120,220,255,0.7)",
                       background: "rgba(255,255,255,0.12)",
-                      color: "#54e2e2ff",
+                      color: "#b1f3ff",
                       transform: "translateY(-2px)",
+                      boxShadow: "0 0 12px rgba(120,200,255,0.25)",
                     }
                   : undefined,
               }}

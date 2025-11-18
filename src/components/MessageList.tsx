@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import { MessageBubble } from "./MessageBubble";
 import { Messagelist } from "./types";
 
@@ -45,26 +45,11 @@ export const MessageList = ({ messages }: { messages: Messagelist[] }) => {
             },
           }}
         >
-          <Typography
-            variant="h4"
-            sx={{
-              fontWeight: 700,
-              letterSpacing: "0.5px",
-              background: "linear-gradient(90deg, #7dd3fc, #38bdf8, #0ea5e9)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              mb: 1,
-              textShadow: "0 0 10px rgba(56, 189, 248, 0.25)",
-            }}
-          >
-            Bem-vindo de volta!
-          </Typography>
-
           <Box
             sx={{
               mt: 3,
-              width: "60px",
-              height: "4px",
+              width: "1000px",
+              height: "10px",
               borderRadius: "8px",
               background: "linear-gradient(90deg, #0ea5e9, #38bdf8)",
               boxShadow: "0 0 10px #0ea5e9aa",

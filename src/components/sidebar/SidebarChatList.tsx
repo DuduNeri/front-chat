@@ -2,6 +2,8 @@ import { Box, IconButton, Typography } from "@mui/material";
 import { getChatsByUser } from "../../api/chat/listChats";
 import { useEffect, useState } from "react";
 import { getConversation } from "../../api/chat/listChat";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import { DeleteChat } from "../layouts/DeleteModal";
 
 interface Props {
   isMobile: boolean;
@@ -12,21 +14,19 @@ export const SidebarChatList = ({ isMobile }: Props) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [selectedConversation, setSelectedConversation] = useState<any>(null);
+  const [openDelete, setOpenDelete] = useState(false);
 
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
 
   const fetchChats = async () => {
-    if (!token || !userId) {
-      return;
-    }
+    if (!token || !userId) return;
 
     try {
       setLoading(true);
       setError(null);
 
       const data = await getChatsByUser(userId);
-      console.log("Array de conversas", data);
       setChats(data);
     } catch (e) {
       console.error("Erro ao carregar conversas:", e);
@@ -46,23 +46,22 @@ export const SidebarChatList = ({ isMobile }: Props) => {
         flex: 1,
         display: "flex",
         flexDirection: "column",
-        gap: 2,
+        gap: isMobile ? 1.5 : 2,
         width: "100%",
-        p: 1,
+        p: isMobile ? 0.6 : 1.2,
         borderRadius: 2,
-
         backdropFilter: "blur(6px)",
       }}
     >
-      {/* ❌ Mensagem de erro */}
+      {/* ❌ Erro */}
       {error && (
         <Typography
           sx={{
             color: "#ff8585",
-            fontSize: "0.85rem",
+            fontSize: isMobile ? "0.75rem" : "0.85rem",
             background: "rgba(255,0,0,0.05)",
             border: "1px solid rgba(255,0,0,0.15)",
-            p: 1,
+            p: isMobile ? 0.8 : 1,
             borderRadius: 2,
           }}
         >
@@ -70,14 +69,20 @@ export const SidebarChatList = ({ isMobile }: Props) => {
         </Typography>
       )}
 
-      {/* 📜 Lista de conversas */}
-      <Box sx={{ display: "flex", flexDirection: "column", gap: 1.2 }}>
+      {/* 📜 Lista */}
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          gap: isMobile ? 0.8 : 1.2,
+        }}
+      >
         {loading
           ? [...Array(4)].map((_, i) => (
               <Box
                 key={i}
                 sx={{
-                  height: 36,
+                  height: isMobile ? 32 : 38,
                   borderRadius: 2,
                   background: "rgba(255,255,255,0.05)",
                   border: "1px solid rgba(255,255,255,0.08)",
@@ -95,56 +100,100 @@ export const SidebarChatList = ({ isMobile }: Props) => {
               <Box
                 key={chat.id || chat._id}
                 sx={{
-                  p: 1.2,
+                  p: isMobile ? 1 : 1.2,
                   display: "flex",
                   alignItems: "center",
                   gap: 1.2,
                   borderRadius: 2,
-
                   background: "rgba(255,255,255,0.04)",
                   border: "1px solid rgba(255,255,255,0.08)",
-
-                  transition: "0.25s ease",
                   cursor: "pointer",
+                  transition: "0.25s ease",
 
-                  "&:hover": {
-                    background: "rgba(100,200,255,0.12)",
-                    borderColor: "rgba(100,200,255,0.25)",
-                    transform: "translateX(4px)",
-                    boxShadow: "0 0 12px rgba(100,200,255,0.2)",
-                  },
+                  ...(isMobile
+                    ? {}
+                    : {
+                        "&:hover": {
+                          background: "rgba(100,200,255,0.12)",
+                          borderColor: "rgba(100,200,255,0.25)",
+                          transform: "translateX(4px)",
+                          boxShadow: "0 0 12px rgba(100,200,255,0.2)",
+                        },
+                      }),
+                }}
+                onClick={async () => {
+                  const data = await getConversation(chat.id);
+                  setSelectedConversation(data);
                 }}
               >
-                {/* Indicador neon */}
+                {/* Bolinha neon */}
                 <Box
                   sx={{
-                    width: 8,
-                    height: 8,
+                    width: isMobile ? 6 : 8,
+                    height: isMobile ? 6 : 8,
                     borderRadius: "50%",
                     background: "#64c8ff",
                     boxShadow: "0 0 6px rgba(100,200,255,0.6)",
                   }}
                 />
 
-                <IconButton
-                  onClick={async () => {
-                    const data = await getConversation(chat.id);
-                    setSelectedConversation(data);
-                  }}
+                {/* Título */}
+                <Typography
                   sx={{
+                    flex: 1,
                     color: "#e9f7ff",
-                    fontSize: "0.92rem",
+                    fontSize: isMobile ? "0.85rem" : "0.92rem",
                     fontWeight: 500,
-                    letterSpacing: "0.3px",
                     overflow: "hidden",
                     whiteSpace: "nowrap",
                     textOverflow: "ellipsis",
                   }}
                 >
                   {chat.title || chat.name || "Chat"}
+                </Typography>
+
+                {/* Botão de deletar */}
+                <IconButton
+                  onClick={(e) => {
+                    e.stopPropagation(); // impede abrir o chat
+                    setSelectedConversation(chat);
+                    setOpenDelete(true);
+                  }}
+                  sx={{
+                    ml: "auto", // empurra para o final do container
+                    mr: isMobile ? 0.4 : 1,
+                    p: isMobile ? "4px" : "6px",
+                    borderRadius: "10px",
+                    color: "rgba(255, 80, 80, 0.85)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    transition: "0.25s ease",
+
+                    ...(isMobile
+                      ? {
+                          // MOBILE: sem hover forte
+                          "&:active": {
+                            transform: "scale(0.9)",
+                            color: "rgb(255, 120, 120)",
+                          },
+                        }
+                      : {
+                          // DESKTOP: hover completo
+                          "&:hover": {
+                            color: "rgb(255, 120, 120)",
+                            background: "rgba(255, 80, 80, 0.15)",
+                            boxShadow: "0 0 10px rgba(255, 80, 80, 0.4)",
+                            transform: "translateY(-2px) scale(1.08)",
+                          },
+                        }),
+                  }}
+                >
+                  <DeleteForeverIcon sx={{ fontSize: isMobile ? 22 : 26 }} />
                 </IconButton>
               </Box>
             ))}
+        <DeleteChat open={openDelete} onClose={() => setOpenDelete(false)} />
       </Box>
     </Box>
   );

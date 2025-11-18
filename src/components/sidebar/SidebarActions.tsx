@@ -1,4 +1,4 @@
-import { Box, IconButton, Tooltip, Typography, useTheme } from "@mui/material";
+import { Box, IconButton, Tooltip, Typography } from "@mui/material";
 import {
   Plus as PlusIcon,
   Home as HomeIcon,
@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { CreateRoomModal } from "../layouts/ModalChat";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { createConversation } from "../../api/chat/createChats";
 
 interface Props {
@@ -45,100 +45,124 @@ export const SidebarActions = ({ isMobile }: Props) => {
     }
   };
 
-  useEffect(() => {
-    handleCreateRoom;
-  }, [createConversation]);
-
   const styles = {
     container: {
       display: "flex",
       flexDirection: "column" as const,
-      gap: isMobile ? 1 : 2,
-      width: isMobile ? "100%" : "auto",
-      mt: 2,
+      gap: isMobile ? 0.8 : 1.5,
+      width: "100%",
+      mt: isMobile ? 1.5 : 2,
+      px: isMobile ? 0.6 : 1,
     },
-    button: {
-      transition: "all 0.2s ease-in-out",
-      justifyContent: "flex-start",
-      minHeight: 48,
+
+    buttonBase: {
+      display: "flex",
+      alignItems: "center",
+      width: "100%",
       borderRadius: 2,
-      px: 2,
+      px: isMobile ? 1.4 : 2,
+      py: isMobile ? 0.8 : 1.2,
+      justifyContent: "flex-start",
+      transition: "0.25s ease",
+      cursor: "pointer",
+
+      ...(isMobile
+        ? {}
+        : {
+            "&:hover": {
+              transform: "translateX(4px)",
+              background: "rgba(100,200,255,0.08)",
+              boxShadow: "0 0 10px rgba(100,200,255,0.18)",
+            },
+          }),
+    },
+
+    label: {
+      ml: 1.3,
+      fontSize: isMobile ? "0.88rem" : "0.92rem",
+      fontWeight: 500,
+      color: "inherit",
+    },
+
+    primary: {
+      color: "rgba(200, 240, 255, 0.92)",
       "&:hover": {
-        transform: "translateX(4px)",
-        background: `rgba(100, 200, 255, 0.08)`,
+        color: "rgba(120, 255, 255, 1)",
       },
     },
-    primaryButton: {
-      color: "rgba(220, 220, 230, 0.8)",
+
+    standard: {
+      color: "rgba(220, 220, 230, 0.85)",
       "&:hover": {
-        color: "rgba(100, 255, 255, 1)",
+        color: "rgba(130, 200, 255, 1)",
       },
     },
-    standardButton: {
-      color: "rgba(220, 220, 230, 0.8)",
-      "&:hover": {
-        color: "rgba(100, 200, 255, 1)",
-      },
-    },
-    dangerButton: {
-      color: "rgba(255, 120, 120, 0.8)",
+
+    danger: {
+      color: "rgba(255, 120, 120, 0.82)",
       "&:hover": {
         color: "rgba(255, 100, 100, 1)",
       },
     },
-    label: {
-      ml: 1.5,
-      fontSize: "0.9rem",
-      fontWeight: 500,
-      color: "inherit",
-    },
+  };
+
+  const ButtonWrapper = ({ children, title }: any) => {
+    if (isMobile) {
+      return <Box>{children}</Box>;
+    }
+    return (
+      <Tooltip title={title} placement="right">
+        <Box>{children}</Box>
+      </Tooltip>
+    );
   };
 
   return (
     <>
       <Box sx={styles.container}>
-        {/* Criar Conversa */}
-        <Tooltip title="" placement="right">
+        {/* Criar sala */}
+        <ButtonWrapper title="Criar sala">
           <IconButton
             disableRipple
+            sx={{ ...styles.buttonBase, ...styles.primary }}
             onClick={() => setOpen(true)}
-            sx={{ ...styles.button, ...styles.primaryButton }}
           >
-            <PlusIcon size={22} />
+            <PlusIcon size={isMobile ? 20 : 22} />
             <Typography sx={styles.label}>Criar sala</Typography>
           </IconButton>
-        </Tooltip>
+        </ButtonWrapper>
 
         {/* Home */}
-        <Tooltip title="Página Inicial" placement="right">
-          <IconButton sx={{ ...styles.button, ...styles.standardButton }}>
-            <HomeIcon size={22} />
+        <ButtonWrapper title="Página inicial">
+          <IconButton disableRipple sx={{ ...styles.buttonBase, ...styles.standard }}>
+            <HomeIcon size={isMobile ? 20 : 22} />
             <Typography sx={styles.label}>Página inicial</Typography>
           </IconButton>
-        </Tooltip>
+        </ButtonWrapper>
 
         {/* Configurações */}
-        <Tooltip title="Configurações" placement="right">
-          <IconButton sx={{ ...styles.button, ...styles.standardButton }}>
-            <SettingsIcon size={22} />
+        <ButtonWrapper title="Configurações">
+          <IconButton disableRipple sx={{ ...styles.buttonBase, ...styles.standard }}>
+            <SettingsIcon size={isMobile ? 20 : 22} />
             <Typography sx={styles.label}>Configurações</Typography>
           </IconButton>
-        </Tooltip>
+        </ButtonWrapper>
 
         {/* Logout */}
-        <Tooltip title="Sair" placement="right">
+        <ButtonWrapper title="Sair">
           <IconButton
+            disableRipple
+            sx={{ ...styles.buttonBase, ...styles.danger }}
             onClick={() => {
               localStorage.removeItem("token");
               localStorage.removeItem("userId");
               navigate("/login");
             }}
-            sx={{ ...styles.button, ...styles.dangerButton }}
           >
-            <LogOutIcon size={22} />
+            <LogOutIcon size={isMobile ? 20 : 22} />
             <Typography sx={styles.label}>Sair</Typography>
           </IconButton>
-        </Tooltip>
+        </ButtonWrapper>
       </Box>
 
       <CreateRoomModal

@@ -1,4 +1,4 @@
-import { Avatar, IconButton, Tooltip, Typography } from "@mui/material";
+import { Avatar, IconButton, Tooltip, Typography, Box } from "@mui/material";
 
 interface Props {
   isMobile: boolean;
@@ -10,54 +10,54 @@ export const SidebarProfile = ({ isMobile }: Props) => {
 
   return (
     <Tooltip title="Perfil" placement="right">
-      <IconButton
+      <Box
         sx={{
-          width: isMobile ? "100%" : 56,
-          height: isMobile ? 44 : 56,
-          borderRadius: isMobile ? 12 : "50%",
-          justifyContent: isMobile ? "flex-start" : "center",
-          pl: isMobile ? 1.4 : 0,
-          transition: "all 0.25s ease",
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
+          gap: 1.4,
+          padding: "8px 6px",
+          borderRadius: 12,
+          transition: "0.25s ease",
+          cursor: "pointer",
+
           "&:hover": {
-            background:
-              "linear-gradient(135deg, rgba(100, 200, 255, 0.27), rgba(80, 150, 220, 0.22))",
-            borderColor: "rgba(100, 200, 255, 0.75)",
+            background: "rgba(120,200,255,0.10)",
             transform: "translateY(-2px)",
-            boxShadow: "0 0 14px rgba(100, 200, 255, 0.28)",
+            boxShadow: "0 0 18px rgba(120,200,255,0.28)",
           },
         }}
       >
+        {/* Avatar */}
         <Avatar
           sx={{
-            width: isMobile ? 34 : 40,
-            height: isMobile ? 34 : 40,
+            width: 42,
+            height: 42,
             background:
-              "linear-gradient(135deg, rgba(100, 200, 255, 0.35), rgba(80, 150, 220, 0.22))",
-            fontSize: isMobile ? "0.85rem" : "1rem",
+              "linear-gradient(135deg, rgba(120,200,255,0.35), rgba(80,140,220,0.22))",
+            fontSize: "1.1rem",
             fontWeight: 700,
-            mr: isMobile ? 1.4 : 0,
-            color: "#fff",
-            letterSpacing: 0.5,
-            boxShadow: "0 0 6px rgba(100,200,255,0.55)",
+            color: "#e8faff",
+            letterSpacing: 0.6,
+            boxShadow: "0 0 8px rgba(120,200,255,0.55)",
           }}
         >
           {firstLetter || "?"}
         </Avatar>
 
-        {isMobile && (
-          <Typography
-            sx={{
-              color: "rgba(235, 245, 255, 0.92)",
-              ml: 1,
-              fontWeight: 600,
-              fontSize: "0.95rem",
-              letterSpacing: 0.3,
-            }}
-          >
-            {userName || "Perfil"}
-          </Typography>
-        )}
-      </IconButton>
+        {/* Nome sempre visível */}
+        <Typography
+          sx={{
+            color: "rgba(235,245,255,0.95)",
+            fontWeight: 600,
+            fontSize: "1rem",
+            letterSpacing: 0.4,
+            textShadow: "0 0 6px rgba(120,200,255,0.28)",
+          }}
+        >
+          {userName || "Usuário"}
+        </Typography>
+      </Box>
     </Tooltip>
   );
 };

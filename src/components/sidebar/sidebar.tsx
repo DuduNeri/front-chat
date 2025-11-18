@@ -13,21 +13,28 @@ export const Sidebar = ({ isMobile, setSidebarOpen }: Props) => {
   return (
     <Box
       sx={{
-        width: isMobile ? "100%" : 200, // ← 🔥 AQUI aumentei a largura
+        width: isMobile ? "100%" : 420,
         height: "100vh",
         display: "flex",
         flexDirection: "column",
         gap: isMobile ? 2 : 3,
-        py: isMobile ? 2 : 3,
-        px: isMobile ? 2 : 2,
-        borderRight: isMobile ? "none" : "1px solid rgba(100,200,255,0.18)",
-        alignItems: isMobile ? "flex-start" : "center",
+        py: isMobile ? 1.5 : 3,
+        px: isMobile ? 2 : 3,
+        background: "linear-gradient(180deg, #1b1d29 0%, #161722 100%)",
+        borderRight: isMobile ? "none" : "1px solid rgba(100, 200, 255, 0.12)",
+        alignItems: "stretch",
         overflowY: "auto",
         scrollbarWidth: "none",
+        transition: "all .3s ease",
 
         "&::-webkit-scrollbar": {
-          width: 0,
+          display: "none",
         },
+
+        // glow sutil nas bordas
+        boxShadow: isMobile
+          ? "none"
+          : "8px 0 25px rgba(100, 200, 255, 0.08)",
       }}
     >
       {/* 🔹 Header */}
@@ -36,8 +43,10 @@ export const Sidebar = ({ isMobile, setSidebarOpen }: Props) => {
       {/* 🔹 Profile */}
       <SidebarProfile isMobile={isMobile} />
 
-      {/* 🔹 Lista de Chats */}
-      <SidebarChatList isMobile={isMobile} />
+      {/* 🔹 Lista de Chats (scroll flexível) */}
+      <Box sx={{ flex: 1, display: "flex" }}>
+        <SidebarChatList isMobile={isMobile} />
+      </Box>
 
       {/* 🔹 Ações */}
       <SidebarActions isMobile={isMobile} />
