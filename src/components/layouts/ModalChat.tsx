@@ -69,6 +69,11 @@ export const CreateRoomModal = ({
       alert("O nome da sala é obrigatório!");
       return;
     }
+    if (!title || title.trim().length > 30) {
+      alert("O título deve ter no máximo 30 caracteres");
+      return;
+    }
+
     onSubmit({
       title,
       participants: selectedUsers.map((u) => u.id),
