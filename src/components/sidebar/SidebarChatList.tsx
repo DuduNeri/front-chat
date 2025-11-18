@@ -13,6 +13,7 @@ export const SidebarChatList = ({ isMobile }: Props) => {
   const [chats, setChats] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
   const [selectedConversation, setSelectedConversation] = useState<any>(null);
   const [openDelete, setOpenDelete] = useState(false);
 
@@ -70,13 +71,7 @@ export const SidebarChatList = ({ isMobile }: Props) => {
       )}
 
       {/* 📜 Lista */}
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          gap: isMobile ? 0.8 : 1.2,
-        }}
-      >
+      <Box sx={{ display: "flex", flexDirection: "column", gap: isMobile ? 0.8 : 1.2 }}>
         {loading
           ? [...Array(4)].map((_, i) => (
               <Box
@@ -87,7 +82,6 @@ export const SidebarChatList = ({ isMobile }: Props) => {
                   background: "rgba(255,255,255,0.05)",
                   border: "1px solid rgba(255,255,255,0.08)",
                   animation: "pulse 1.5s infinite",
-
                   "@keyframes pulse": {
                     "0%": { opacity: 0.4 },
                     "50%": { opacity: 1 },
@@ -98,7 +92,7 @@ export const SidebarChatList = ({ isMobile }: Props) => {
             ))
           : chats.map((chat) => (
               <Box
-                key={chat.id || chat._id}
+                key={chat.id}
                 sx={{
                   p: isMobile ? 1 : 1.2,
                   display: "flex",
@@ -109,7 +103,6 @@ export const SidebarChatList = ({ isMobile }: Props) => {
                   border: "1px solid rgba(255,255,255,0.08)",
                   cursor: "pointer",
                   transition: "0.25s ease",
-
                   ...(isMobile
                     ? {}
                     : {
@@ -155,35 +148,24 @@ export const SidebarChatList = ({ isMobile }: Props) => {
                 {/* Botão de deletar */}
                 <IconButton
                   onClick={(e) => {
-                    e.stopPropagation(); // impede abrir o chat
+                    e.stopPropagation();
                     setSelectedConversation(chat);
                     setOpenDelete(true);
                   }}
                   sx={{
-                    ml: "auto", // empurra para o final do container
+                    ml: "auto",
                     mr: isMobile ? 0.4 : 1,
                     p: isMobile ? "4px" : "6px",
                     borderRadius: "10px",
                     color: "rgba(255, 80, 80, 0.85)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
                     transition: "0.25s ease",
-
                     ...(isMobile
-                      ? {
-                          // MOBILE: sem hover forte
-                          "&:active": {
-                            transform: "scale(0.9)",
-                            color: "rgb(255, 120, 120)",
-                          },
-                        }
+                      ? { "&:active": { transform: "scale(0.9)", color: "rgb(255,120,120)" } }
                       : {
-                          // DESKTOP: hover completo
                           "&:hover": {
-                            color: "rgb(255, 120, 120)",
-                            background: "rgba(255, 80, 80, 0.15)",
-                            boxShadow: "0 0 10px rgba(255, 80, 80, 0.4)",
+                            color: "rgb(255,120,120)",
+                            background: "rgba(255,80,80,0.15)",
+                            boxShadow: "0 0 10px rgba(255,80,80,0.4)",
                             transform: "translateY(-2px) scale(1.08)",
                           },
                         }),
@@ -193,7 +175,16 @@ export const SidebarChatList = ({ isMobile }: Props) => {
                 </IconButton>
               </Box>
             ))}
-        <DeleteChat open={openDelete} onClose={() => setOpenDelete(false)} />
+
+        {/* MODAL DELETAR — agora corretamente tipado */}
+        {selectedConversation && (
+          <DeleteChat
+            open={openDelete}
+            onClose={() => setOpenDelete(false)}
+            conversationId={selectedConversation.id}
+            onDeleted={fetchChats}
+          />
+        )}
       </Box>
     </Box>
   );
