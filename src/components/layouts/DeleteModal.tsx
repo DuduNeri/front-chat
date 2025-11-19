@@ -95,10 +95,16 @@ export const DeleteChat = ({ open, onClose, conversationId, onDeleted }: Props) 
             <Button
               onClick={onClose}
               sx={{
-                color: "#ddd",
+                color: "#1cffffff",
                 px: 6,
                 background: "rgba(255,255,255,0.05)",
                 borderRadius: "10px",
+                transition: "0.25s ease",
+                "&:hover": {
+                  background: "rgba(123, 255, 244, 0.12)",
+                  color: "#35ffa1ff",
+                  transform: "translateY(-2px)",
+                },
               }}
             >
               Cancelar

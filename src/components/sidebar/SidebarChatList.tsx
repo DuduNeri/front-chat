@@ -1,21 +1,20 @@
 import { Box, IconButton, Typography } from "@mui/material";
 import { getChatsByUser } from "../../api/chat/listChats";
 import { useEffect, useState } from "react";
-import { getConversation } from "../../api/chat/listChat";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { DeleteChat } from "../layouts/DeleteModal";
 
 interface Props {
   isMobile: boolean;
+  onSelectChat: (id: string) => void; 
 }
 
-export const SidebarChatList = ({ isMobile }: Props) => {
+export const SidebarChatList = ({ isMobile, onSelectChat }: Props) => {
   const [chats, setChats] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  const [selectedConversation, setSelectedConversation] = useState<any>(null);
   const [openDelete, setOpenDelete] = useState(false);
+  const [selectedChatId, setSelectedChatId] = useState<string>("");
 
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
@@ -54,7 +53,7 @@ export const SidebarChatList = ({ isMobile }: Props) => {
         backdropFilter: "blur(6px)",
       }}
     >
-      {/* ❌ Erro */}
+      {/* ❌ Mensagem de erro */}
       {error && (
         <Typography
           sx={{
@@ -70,8 +69,14 @@ export const SidebarChatList = ({ isMobile }: Props) => {
         </Typography>
       )}
 
-      {/* 📜 Lista */}
-      <Box sx={{ display: "flex", flexDirection: "column", gap: isMobile ? 0.8 : 1.2 }}>
+      {/* 📜 Lista de chats */}
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          gap: isMobile ? 0.8 : 1.2,
+        }}
+      >
         {loading
           ? [...Array(4)].map((_, i) => (
               <Box
@@ -93,6 +98,7 @@ export const SidebarChatList = ({ isMobile }: Props) => {
           : chats.map((chat) => (
               <Box
                 key={chat.id}
+                onClick={() => onSelectChat(chat.id)} // << ESSENCIAL
                 sx={{
                   p: isMobile ? 1 : 1.2,
                   display: "flex",
@@ -114,12 +120,8 @@ export const SidebarChatList = ({ isMobile }: Props) => {
                         },
                       }),
                 }}
-                onClick={async () => {
-                  const data = await getConversation(chat.id);
-                  setSelectedConversation(data);
-                }}
               >
-                {/* Bolinha neon */}
+                {/* Indicador neon */}
                 <Box
                   sx={{
                     width: isMobile ? 6 : 8,
@@ -145,11 +147,11 @@ export const SidebarChatList = ({ isMobile }: Props) => {
                   {chat.title || chat.name || "Chat"}
                 </Typography>
 
-                {/* Botão de deletar */}
+                {/* Botão deletar */}
                 <IconButton
                   onClick={(e) => {
                     e.stopPropagation();
-                    setSelectedConversation(chat);
+                    setSelectedChatId(chat.id);
                     setOpenDelete(true);
                   }}
                   sx={{
@@ -160,7 +162,12 @@ export const SidebarChatList = ({ isMobile }: Props) => {
                     color: "rgba(255, 80, 80, 0.85)",
                     transition: "0.25s ease",
                     ...(isMobile
-                      ? { "&:active": { transform: "scale(0.9)", color: "rgb(255,120,120)" } }
+                      ? {
+                          "&:active": {
+                            transform: "scale(0.9)",
+                            color: "rgb(255,120,120)",
+                          },
+                        }
                       : {
                           "&:hover": {
                             color: "rgb(255,120,120)",
@@ -176,15 +183,13 @@ export const SidebarChatList = ({ isMobile }: Props) => {
               </Box>
             ))}
 
-        {/* MODAL DELETAR — agora corretamente tipado */}
-        {selectedConversation && (
-          <DeleteChat
-            open={openDelete}
-            onClose={() => setOpenDelete(false)}
-            conversationId={selectedConversation.id}
-            onDeleted={fetchChats}
-          />
-        )}
+        {/* 🗑 MODAL DELETAR */}
+        <DeleteChat
+          open={openDelete}
+          onClose={() => setOpenDelete(false)}
+          onDeleted={fetchChats}
+          conversationId={selectedChatId}
+        />
       </Box>
     </Box>
   );

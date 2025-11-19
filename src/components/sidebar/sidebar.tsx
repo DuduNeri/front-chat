@@ -3,6 +3,7 @@ import { SidebarHeader } from "./SidebarHeader";
 import { SidebarProfile } from "./SidebarProfile";
 import { SidebarChatList } from "./SidebarChatList";
 import { SidebarActions } from "./SidebarActions";
+import { useState } from "react";
 
 interface Props {
   isMobile: boolean;
@@ -10,6 +11,8 @@ interface Props {
 }
 
 export const Sidebar = ({ isMobile, setSidebarOpen }: Props) => {
+  const [activeChatId, setActiveChatId] = useState<string | null>(null);
+
   return (
     <Box
       sx={{
@@ -26,12 +29,7 @@ export const Sidebar = ({ isMobile, setSidebarOpen }: Props) => {
         overflowY: "auto",
         scrollbarWidth: "none",
         transition: "all .3s ease",
-
-        "&::-webkit-scrollbar": {
-          display: "none",
-        },
-
-        // glow sutil nas bordas
+        "&::-webkit-scrollbar": { display: "none" },
         boxShadow: isMobile
           ? "none"
           : "8px 0 25px rgba(100, 200, 255, 0.08)",
@@ -45,7 +43,13 @@ export const Sidebar = ({ isMobile, setSidebarOpen }: Props) => {
 
       {/* 🔹 Lista de Chats (scroll flexível) */}
       <Box sx={{ flex: 1, display: "flex" }}>
-        <SidebarChatList isMobile={isMobile} />
+        <SidebarChatList
+          isMobile={isMobile}
+          onSelectChat={(id) => {
+            console.log("Selecionou chat:", id);
+            setActiveChatId(id);
+          }}
+        />
       </Box>
 
       {/* 🔹 Ações */}

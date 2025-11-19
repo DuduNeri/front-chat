@@ -87,7 +87,7 @@ export const SidebarActions = ({ isMobile }: Props) => {
     primary: {
       color: "rgba(200, 240, 255, 0.92)",
       "&:hover": {
-        color: "rgba(120, 255, 255, 1)",
+        color: "#64C8FF",
       },
     },
 

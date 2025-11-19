@@ -1,8 +1,11 @@
 import { Box, Typography } from "@mui/material";
 import { MessageBubble } from "./MessageBubble";
 import { Messagelist } from "./types";
+import { useState, useEffect } from "react";
 
 export const MessageList = ({ messages }: { messages: Messagelist[] }) => {
+
+  
   return (
     <Box
       sx={{
@@ -54,7 +57,7 @@ export const MessageList = ({ messages }: { messages: Messagelist[] }) => {
           }}
         >
           {/* Linha neon animada */}
-              <Typography
+          <Typography
             sx={{
               mt: 3,
               fontSize: "30px",
@@ -86,7 +89,6 @@ export const MessageList = ({ messages }: { messages: Messagelist[] }) => {
               },
             }}
           />
-
         </Box>
       ) : (
         messages.map((msg) => <MessageBubble key={msg.id} message={msg} />)
