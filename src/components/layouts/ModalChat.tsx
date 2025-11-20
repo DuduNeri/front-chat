@@ -161,18 +161,28 @@ export const CreateRoomModal = ({
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             fullWidth
-            InputLabelProps={{ style: { color: "#b5b5b5" } }}
+            InputLabelProps={{ style: { color: "#5ecbff" } }} // azul neon suave
             sx={{
               mb: 2,
               "& .MuiOutlinedInput-root": {
-                color: "#e8e8e8",
-                backgroundColor: "rgba(255,255,255,0.06)",
+                color: "#c9f3ff",
+                backgroundColor: "rgba(0, 153, 255, 0.06)", // fundo leve azulado
                 borderRadius: "10px",
+                transition: "0.2s ease",
+
                 "& fieldset": {
-                  borderColor: "rgba(255,255,255,0.12)",
+                  borderColor: "rgba(0, 195, 255, 0.35)", // borda base neon
+                  boxShadow: "0 0 6px rgba(0, 195, 255, 0.25)", // leve glow
                 },
+
                 "&:hover fieldset": {
-                  borderColor: "rgba(255,255,255,0.25)",
+                  borderColor: "#00e1ff",
+                  boxShadow: "0 0 10px #00e1ff",
+                },
+
+                "&.Mui-focused fieldset": {
+                  borderColor: "#00ffff",
+                  boxShadow: "0 0 12px #00ffff", // glow forte no foco
                 },
               },
             }}
@@ -185,20 +195,33 @@ export const CreateRoomModal = ({
             onChange={(e) => setSearch(e.target.value)}
             fullWidth
             InputProps={{
-              style: { color: "#fff" },
+              style: { color: "#c9f3ff" }, // texto com azul claro
               startAdornment: (
                 <InputAdornment position="start">
-                  <Search size={18} color="#ccc" />
+                  <Search size={18} color="#5ecbff" /> {/* ícone azul neon */}
                 </InputAdornment>
               ),
             }}
             sx={{
               mb: 2,
               "& .MuiOutlinedInput-root": {
-                backgroundColor: "rgba(255,255,255,0.05)",
+                backgroundColor: "rgba(0, 153, 255, 0.06)", // fundo levemente azulado
                 borderRadius: "10px",
+                transition: "0.25s ease",
+
                 "& fieldset": {
-                  borderColor: "rgba(255,255,255,0.12)",
+                  borderColor: "rgba(0, 195, 255, 0.35)", // borda base neon
+                  boxShadow: "0 0 6px rgba(0, 195, 255, 0.25)",
+                },
+
+                "&:hover fieldset": {
+                  borderColor: "#00e1ff",
+                  boxShadow: "0 0 10px #00e1ff",
+                },
+
+                "&.Mui-focused fieldset": {
+                  borderColor: "#00ffff",
+                  boxShadow: "0 0 12px #00ffff",
                 },
               },
             }}

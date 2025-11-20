@@ -8,9 +8,11 @@ import { useState } from "react";
 interface Props {
   isMobile: boolean;
   setSidebarOpen?: (value: boolean) => void;
+
+  onSelectChat?: (chatId: string) => void;
 }
 
-export const Sidebar = ({ isMobile, setSidebarOpen }: Props) => {
+export const Sidebar = ({ isMobile, setSidebarOpen, onSelectChat }: Props) => {
   const [activeChatId, setActiveChatId] = useState<string | null>(null);
 
   return (
@@ -41,13 +43,16 @@ export const Sidebar = ({ isMobile, setSidebarOpen }: Props) => {
       {/* 🔹 Profile */}
       <SidebarProfile isMobile={isMobile} />
 
-      {/* 🔹 Lista de Chats (scroll flexível) */}
+      {/* 🔹 Lista de Chats */}
       <Box sx={{ flex: 1, display: "flex" }}>
         <SidebarChatList
           isMobile={isMobile}
           onSelectChat={(id) => {
             console.log("Selecionou chat:", id);
             setActiveChatId(id);
+
+            // 🔥 Agora repassa para o Home
+            onSelectChat?.(id);
           }}
         />
       </Box>
