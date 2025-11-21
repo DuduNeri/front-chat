@@ -3,11 +3,13 @@ import { Check as CheckIcon } from "lucide-react";
 import { Message } from "../api/types/types";
 
 interface Props {
-  message: Message;
-  currentUserId: string; // id do usuário logado
+  message?: Message | null; // permite null/undefined
+  currentUserId: string; 
 }
 
 export const MessageBubble = ({ message, currentUserId }: Props) => {
+  if (!message || !message.sender) return null; // evita crash
+
   const isUser = message.sender.id === currentUserId;
 
   return (

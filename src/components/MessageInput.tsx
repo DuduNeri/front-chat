@@ -1,107 +1,112 @@
+import { useState, useRef } from "react";
 import { Box, TextField, IconButton } from "@mui/material";
-import { Mic as MicIcon, Send as SendIcon } from "lucide-react";
+import { Send as SendIcon } from "lucide-react";
 
 interface Props {
-  inputValue: string;
-  setInputValue: (value: string) => void;
-  handleSendMessage: () => void;
-  handleKeyPress: (e: React.KeyboardEvent) => void;
+  conversationId: string;
+  onMessageSent: (content: string) => void;
   isMobile: boolean;
 }
 
-export const MessageInput = ({
-  inputValue,
-  setInputValue,
-  handleSendMessage,
-  handleKeyPress,
-  isMobile,
-}: Props) => {
+export const MessageInput = ({ conversationId, onMessageSent, isMobile }: Props) => {
+  const [inputValue, setInputValue] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null); // Para foco automático
+
+  const handleSendMessage = () => {
+    const trimmed = inputValue.trim();
+    if (!trimmed) return;
+
+    try {
+      onMessageSent(trimmed);
+      setInputValue("");
+      inputRef.current?.focus(); // Foco de volta pro input
+      console.log(`✅ Mensagem enviada para chat ${conversationId}: "${trimmed}"`); // Log pra debug
+    } catch (err) {
+      console.error("❌ Erro ao enviar mensagem:", err);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSendMessage();
+    }
+  };
+
   return (
     <Box
       sx={{
         display: "flex",
-        gap: { xs: 0.5, md: 1 },
-        alignItems: "flex-end",
-        justifyContent: "center",
-        width: "100%",
-        flexShrink: 0,
+        gap: 1,
+        alignItems: "center",
+        p: 1.5,
+        background: "rgba(15, 15, 30, 0.7)",
+        backdropFilter: "blur(10px)",
+        borderRadius: "32px",
+        border: "1.5px solid rgba(0, 200, 255, 0.25)",
+        boxShadow: "0 4px 12px rgba(0, 200, 255, 0.1)",
       }}
     >
-    <TextField
-            multiline
-            maxRows={3}
-            placeholder="Mensagem..."
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            onKeyPress={handleKeyPress}
-            fullWidth={isMobile}
-            InputProps={{
-              startAdornment: (
-                <IconButton
-                  size="small"
-                  sx={{
-                    mr: 0.3,
-                    color: 'rgba(100, 200, 255, 0.6)',
-                    transition: 'all 0.2s',
-                    p: 0.5,
-                    '&:hover': {
-                      color: 'rgba(100, 200, 255, 1)',
-                    },
-                  }}
-                >
-                  <MicIcon size={isMobile ? 16 : 18} />
-                </IconButton>
-              ),
-              endAdornment: (
-                <IconButton
-                  size="small"
-                  onClick={handleSendMessage}
-                  sx={{
-                    ml: 0.3,
-                    color: 'rgba(100, 200, 255, 0.6)',
-                    transition: 'all 0.2s',
-                    p: 0.5,
-                    '&:hover': {
-                      color: 'rgba(100, 200, 255, 1)',
-                    },
-                  }}
-                >
-                  <SendIcon size={isMobile ? 16 : 18} />
-                </IconButton>
-              ),
-            }}
-            sx={{
-              width: { xs: '100%', sm: '90%', md: '50%' },
-              '& .MuiOutlinedInput-root': {
-                color: '#fff',
-                backgroundColor: 'rgba(50, 50, 80, 0.4)',
-                borderRadius: '24px',
-                border: '1.5px solid rgba(100, 200, 255, 0.25)',
-                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                '& fieldset': {
-                  borderColor: 'rgba(100, 200, 255, 0.25)',
-                },
-                '&:hover fieldset': {
-                  borderColor: 'rgba(100, 200, 255, 0.4)',
-                },
-                '&.Mui-focused': {
-                  backgroundColor: 'rgba(50, 50, 80, 0.6)',
-                  boxShadow: '0 0 24px rgba(100, 200, 255, 0.15)',
-                  '& fieldset': {
-                    borderColor: 'rgba(100, 200, 255, 0.7)',
-                  },
-                },
+      <TextField
+        inputRef={inputRef}
+        multiline
+        maxRows={3}
+        placeholder="Digite sua mensagem..."
+        value={inputValue}
+        onChange={(e) => setInputValue(e.target.value)}
+        onKeyDown={handleKeyDown} // Mudei pra onKeyDown (melhor que onKeyPress em React)
+        fullWidth
+        variant="outlined"
+        sx={{
+          "& .MuiOutlinedInput-root": {
+            color: "#fff",
+            backgroundColor: "rgba(30, 30, 60, 0.5)",
+            borderRadius: "32px",
+            "& fieldset": {
+              borderColor: "rgba(0, 200, 255, 0.3)",
+            },
+            "&:hover fieldset": {
+              borderColor: "rgba(0, 200, 255, 0.6)",
+            },
+            "&.Mui-focused": {
+              backgroundColor: "rgba(30, 30, 60, 0.7)",
+              boxShadow: "0 0 20px rgba(0, 200, 255, 0.2)",
+              "& fieldset": {
+                borderColor: "rgba(0, 200, 255, 0.8)",
               },
-              '& .MuiOutlinedInput-input': {
-                padding: { xs: '9px 12px', md: '11px 14px' },
-                fontSize: { xs: '0.85rem', md: '0.95rem' },
-              },
-              '& .MuiOutlinedInput-input::placeholder': {
-                color: 'rgba(255, 255, 255, 0.35)',
-                opacity: 1,
-              },
-            }}
-          />
+            },
+          },
+          "& .MuiOutlinedInput-input::placeholder": {
+            color: "rgba(0, 200, 255, 0.4)",
+            opacity: 1,
+          },
+        }}
+        InputProps={{
+          sx: {
+            fontSize: isMobile ? "0.9rem" : "1rem", // Ajuste pra mobile
+          },
+        }}
+      />
+      <IconButton
+        onClick={handleSendMessage}
+        disabled={!inputValue.trim()} // Desabilita se vazio
+        sx={{
+          color: "rgba(0, 200, 255, 0.7)",
+          background: "rgba(0, 200, 255, 0.05)",
+          "&:hover": {
+            color: "#00e5ff",
+            background: "rgba(0, 200, 255, 0.15)",
+            transform: "scale(1.15)",
+            transition: "all 0.2s ease-in-out",
+            boxShadow: "0 0 12px rgba(0, 200, 255, 0.5)",
+          },
+          "&:disabled": {
+            color: "rgba(0, 200, 255, 0.3)",
+          },
+        }}
+      >
+        <SendIcon size={isMobile ? 18 : 22} />
+      </IconButton>
     </Box>
   );
 };

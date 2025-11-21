@@ -48,10 +48,8 @@ export const Sidebar = ({ isMobile, setSidebarOpen, onSelectChat }: Props) => {
         <SidebarChatList
           isMobile={isMobile}
           onSelectChat={(id) => {
-            console.log("Selecionou chat:", id);
             setActiveChatId(id);
-
-            // 🔥 Agora repassa para o Home
+            
             onSelectChat?.(id);
           }}
         />
