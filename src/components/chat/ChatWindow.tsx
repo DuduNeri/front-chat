@@ -29,7 +29,6 @@ export const ChatWindow = ({ activeChatId, currentUserId, isMobile }: ChatWindow
       try {
         const data = await getMessages(activeChatId);
         if (Array.isArray(data)) {
-          // Filtro opcional: Ignora mensagens inválidas do backend
           setMessages(data.filter((msg) => msg.id && msg.content));
         }
       } catch (err) {
@@ -44,7 +43,6 @@ export const ChatWindow = ({ activeChatId, currentUserId, isMobile }: ChatWindow
   useEffect(() => {
     if (!activeChatId) return;
 
-    // Fecha conexão antiga
     wsRef.current?.close();
 
     const ws = new WebSocket(`ws://localhost:4000?chatId=${activeChatId}`);
@@ -59,10 +57,9 @@ export const ChatWindow = ({ activeChatId, currentUserId, isMobile }: ChatWindow
         const newMessage: Message = JSON.parse(event.data);
         if (!newMessage.id) {
           console.warn("Mensagem do WS sem id:", newMessage);
-          return; // Ignora mensagens inválidas
+          return;
         }
         setMessages((prev) => {
-          // Substitui temp se matching (previne race condition duplicatas)
           const tempIndex = prev.findIndex(
             (m) => m.id.startsWith("temp-") && m.content === newMessage.content && m.senderId === currentUserId
           );
@@ -71,7 +68,6 @@ export const ChatWindow = ({ activeChatId, currentUserId, isMobile }: ChatWindow
             newPrev[tempIndex] = newMessage;
             return newPrev;
           }
-          // Evita adicionar se já existe
           if (prev.some((m) => m.id === newMessage.id)) return prev;
           return [...prev, newMessage];
         });
@@ -83,11 +79,14 @@ export const ChatWindow = ({ activeChatId, currentUserId, isMobile }: ChatWindow
     return () => ws.close();
   }, [activeChatId, currentUserId]);
 
-  // 3️⃣ Auto-scroll para o bottom quando mensagens mudam ou chat carrega
+  // 3️⃣ Auto-scroll para o bottom quando mensagens mudam
   useEffect(() => {
     if (bottomAnchorRef.current) {
-      console.log("Scrolling to bottom..."); // Debug: verifique se isso aparece no console ao enviar/carregar
-      bottomAnchorRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
+      bottomAnchorRef.current.scrollIntoView({ 
+        behavior: "smooth", 
+        block: "end",
+        inline: "nearest"
+      });
     }
   }, [messages]);
 
@@ -95,7 +94,6 @@ export const ChatWindow = ({ activeChatId, currentUserId, isMobile }: ChatWindow
   const handleMessageSent = async (content: string) => {
     if (!activeChatId || !content.trim()) return;
 
-    // Mensagem temporária local
     const tempMessage: Message = {      
       id: `temp-${Date.now()}`,
       content,
@@ -109,37 +107,27 @@ export const ChatWindow = ({ activeChatId, currentUserId, isMobile }: ChatWindow
         email: "temp@example.com",
       },
     };
-    console.log(tempMessage);
     
     setMessages((prev) => [...prev, tempMessage]);
 
     try {
-      // Envia para backend salvar no banco
       const savedMessage = await SendMessage(activeChatId, content);
-      console.log("Saved message from backend:", savedMessage); // Debug: Verifique se id está undefined aqui
 
-      // FIX: Valide se savedMessage é válido antes de atualizar (evita override com {})
       if (!savedMessage || !savedMessage.id || Object.keys(savedMessage).length === 0) {
         console.error("Backend retornou mensagem inválida/empty - mantendo temp:", savedMessage);
-        return; // Não atualiza - mantém temp (fixe backend!)
+        return;
       }
 
-      // Safeguard: Copie campos do temp se missing no saved
       const fixedSavedMessage = {
-        ...tempMessage, // Retém temp como base
-        ...savedMessage, // Override com saved (id, etc.)
+        ...tempMessage,
+        ...savedMessage,
       };
 
-      // Atualiza a mensagem temporária
       setMessages((prev) =>
         prev.map((msg) => (msg.id === tempMessage.id ? fixedSavedMessage : msg))
       );
-
-      // Opcional: envia via WebSocket (comente se backend broadcast automaticamente para evitar duplicatas)
-      // wsRef.current?.send(JSON.stringify({ senderId: currentUserId, content }));
     } catch (err) {
       console.error("Erro ao enviar mensagem:", err);
-      // Remove temp em caso de erro
       setMessages((prev) => prev.filter((msg) => msg.id !== tempMessage.id));
     }
   };
@@ -152,10 +140,24 @@ export const ChatWindow = ({ activeChatId, currentUserId, isMobile }: ChatWindow
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          color: "#aaa",
+          background: "linear-gradient(135deg, rgba(10, 15, 30, 0.6) 0%, rgba(20, 25, 45, 0.4) 100%)",
+          backdropFilter: "blur(12px)",
+          borderRadius: "24px",
+          border: "1px solid rgba(255, 255, 255, 0.1)",
+          color: "rgba(255, 255, 255, 0.6)",
+          fontSize: { xs: "1.1rem", sm: "1.25rem" },
+          fontWeight: 300,
+          letterSpacing: "0.02em",
         }}
       >
-        Selecione uma conversa para começar
+        <Box
+          sx={{
+            textAlign: "center",
+            opacity: 0.8,
+          }}
+        >
+          💬 Selecione uma conversa para começar
+        </Box>
       </Box>
     );
   }
@@ -166,9 +168,13 @@ export const ChatWindow = ({ activeChatId, currentUserId, isMobile }: ChatWindow
         flex: 1,
         display: "flex",
         flexDirection: "column",
-        p: { xs: 1, sm: 2 },
-        gap: 2,
+        p: { xs: 1.5, sm: 2.5 },
+        gap: 2.5,
         height: "100%",
+        background: "linear-gradient(135deg, rgba(12, 18, 35, 0.5) 0%, rgba(18, 24, 45, 0.3) 100%)",
+        backdropFilter: "blur(10px)",
+        borderRadius: "24px",
+        border: "1px solid rgba(255, 255, 255, 0.08)",
       }}
     >
       <Box
@@ -178,14 +184,29 @@ export const ChatWindow = ({ activeChatId, currentUserId, isMobile }: ChatWindow
           overflowY: "auto",
           display: "flex",
           flexDirection: "column",
-          gap: 1,
-          // Adicione padding-bottom para espaço extra no bottom se necessário
+          gap: 1.5,
           pb: 2,
+          // Custom scrollbar
+          "&::-webkit-scrollbar": {
+            width: "6px",
+          },
+          "&::-webkit-scrollbar-track": {
+            background: "rgba(255, 255, 255, 0.02)",
+            borderRadius: "10px",
+          },
+          "&::-webkit-scrollbar-thumb": {
+            background: "rgba(0, 180, 255, 0.2)",
+            borderRadius: "10px",
+            "&:hover": {
+              background: "rgba(0, 200, 255, 0.3)",
+            },
+          },
         }}
       >
-        <MessageList messages={messages} currentUserId={currentUserId} />
-        <div ref={bottomAnchorRef} /> {/* Âncora invisível para scrollIntoView */}
+        <MessageList messages={messages} currentUserId={currentUserId} ref={scrollContainerRef} />
+        <div ref={bottomAnchorRef} />
       </Box>
+      
       <MessageInput
         conversationId={activeChatId}
         onMessageSent={handleMessageSent}

@@ -1,6 +1,5 @@
 import React, { forwardRef } from "react";
 import { Box, Typography } from "@mui/material";
-import { motion, AnimatePresence } from "framer-motion";
 import { Message } from "../api/types/types";
 
 interface Props {
@@ -15,116 +14,103 @@ export const MessageList = forwardRef<HTMLDivElement, Props>((props, ref) => {
     <Box
       ref={ref}
       sx={{
-        flex: 1,
-        overflowY: "auto",
-        p: { xs: 1, sm: 2 },
         display: "flex",
         flexDirection: "column",
-        gap: 2,
-        // scroll suave
-        scrollbarWidth: "thin",
-        scrollbarColor: "#333 #0b141a",
-        "&::-webkit-scrollbar": {
-          width: "8px",
-        },
-        "&::-webkit-scrollbar-track": {
-          background: "#0b141a",
-        },
-        "&::-webkit-scrollbar-thumb": {
-          background: "#333",
-          borderRadius: "4px",
-        },
+        gap: 1.5,
+        p: { xs: 1.5, sm: 2.5 },
+        width: "100%",
+        background: "linear-gradient(135deg, rgba(10, 15, 30, 0.4) 0%, rgba(20, 25, 45, 0.2) 100%)",
+        borderRadius: { xs: "20px", sm: "24px" },
+        backdropFilter: "blur(8px)",
       }}
     >
-      <AnimatePresence initial={false}>
-        {messages.map((message, index) => {
-          const isOwn = message.senderId === currentUserId;
-          const isTemp = message.id?.startsWith("temp-");
+      {messages.map((message, index) => {
+        const isOwn = message.senderId === currentUserId;
 
-          return (
-            <motion.div
-              key={message.id ?? `fallback-${index}`}
-              initial={{ opacity: 0, y: 30, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              transition={{
-                duration: 0.35,
-                ease: "easeOut",
-                delay: isTemp ? 0 : index * 0.03, // stagger natural
+        return (
+          <Box
+            key={message.id ?? `fallback-${index}`}
+            sx={{
+              width: "100%",
+              display: "flex",
+              justifyContent: isOwn ? "flex-end" : "flex-start",
+              animation: "fadeInUp 0.3s ease-out forwards",
+              animationDelay: `${index * 0.05}s`,
+              opacity: 0,
+              transform: "translateY(8px)",
+              
+              "@keyframes fadeInUp": {
+                "0%": {
+                  opacity: 0,
+                  transform: "translateY(8px) scale(0.95)",
+                },
+                "100%": {
+                  opacity: 1,
+                  transform: "translateY(0) scale(1)",
+                },
+              },
+            }}
+          >
+            <Box
+              sx={{
+                maxWidth: { xs: "85%", sm: "70%" },
+                minWidth: "60px",
+                background: isOwn
+                  ? "linear-gradient(135deg, rgba(0, 150, 255, 0.15) 0%, rgba(0, 200, 255, 0.1) 100%)"
+                  : "linear-gradient(135deg, rgba(40, 45, 70, 0.15) 0%, rgba(30, 35, 60, 0.1) 100%)",
+                backdropFilter: "blur(12px)",
+                color: "#f0f2f5",
+                borderRadius: "20px",
+                px: 2.5,
+                py: 1.5,
+                boxShadow: isOwn
+                  ? "0 4px 20px rgba(0, 150, 255, 0.2), 0 2px 8px rgba(0, 200, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1)"
+                  : "0 4px 20px rgba(0, 0, 0, 0.15), 0 2px 8px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05)",
+                border: isOwn
+                  ? "1px solid rgba(0, 180, 255, 0.3)"
+                  : "1px solid rgba(255, 255, 255, 0.1)",
+                borderBottomRightRadius: isOwn ? "6px" : "20px",
+                borderBottomLeftRadius: isOwn ? "20px" : "6px",
+                transition: "all 0.2s ease-in-out",
+                position: "relative",
+                overflow: "hidden",
+                
+                "&:hover": {
+                  transform: "translateY(-1px)",
+                  boxShadow: isOwn
+                    ? "0 6px 24px rgba(0, 150, 255, 0.25), 0 3px 12px rgba(0, 200, 255, 0.2)"
+                    : "0 6px 24px rgba(0, 0, 0, 0.2), 0 3px 12px rgba(0, 0, 0, 0.15)",
+                },
+                
+                "&::before": {
+                  content: '""',
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  height: "1px",
+                  background: isOwn
+                    ? "linear-gradient(90deg, transparent 0%, rgba(0, 200, 255, 0.4) 50%, transparent 100%)"
+                    : "linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.2) 50%, transparent 100%)",
+                },
               }}
-              style={{ width: "100%" }}
             >
-              <Box
+              <Typography
+                variant="body2"
                 sx={{
-                  display: "flex",
-                  justifyContent: isOwn ? "flex-end" : "flex-start",
+                  wordBreak: "break-word",
+                  fontSize: { xs: "0.925rem", sm: "1rem" },
+                  lineHeight: 1.5,
+                  fontWeight: 400,
+                  letterSpacing: "0.01em",
                 }}
               >
-                <Box
-                  sx={{
-                    maxWidth: "75%",
-                    minWidth: "100px",
-                    bgcolor: isOwn ? "#2f465aff" : "#1e2a38", // verde escuro próprio / cinza azulado outro
-                    color: "#e4e6eb",
-                    borderRadius: "18px",
-                    px: 2,
-                    py: 1.5,
-                    position: "relative",
-                    boxShadow: "0 2px 8px rgba(0,0,0,0.4)",
-                    borderBottomRightRadius: isOwn ? "4px" : "18px",
-                    borderBottomLeftRadius: isOwn ? "18px" : "4px",
-                    opacity: isTemp ? 0.6 : 1,
-                    transition: "all 0.3s ease",
-                    "&:hover": {
-                      boxShadow: "0 4px 16px rgba(0,0,0,0.6)",
-                    },
-                  }}
-                >
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      wordBreak: "break-word",
-                      fontSize: { xs: "0.95rem", sm: "1rem" },
-                      lineHeight: 1.4,
-                      fontStyle: isTemp ? "italic" : "normal",
-                    }}
-                  >
-                    {message.content}
-                  </Typography>
-
-                  <Typography
-                    variant="caption"
-                    sx={{
-                      display: "block",
-                      textAlign: "right",
-                      mt: 0.5,
-                      color: isOwn ? "#94e8c8" : "#a0aec0",
-                      opacity: 0.8,
-                      fontSize: "0.69rem",
-                    }}
-                  >
-                    {message.createdAt
-                      ? new Date(message.createdAt).toLocaleTimeString([], {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })
-                      : "•••"}
-                    {isTemp && (
-                      <motion.span
-                        animate={{ opacity: [0.4, 1, 0.4] }}
-                        transition={{ repeat: Infinity, duration: 1.5 }}
-                        style={{ marginLeft: "4px" }}
-                      >
-                        digitando...
-                      </motion.span>
-                    )}
-                  </Typography>
-                </Box>
-              </Box>
-            </motion.div>
-          );
-        })}
-      </AnimatePresence>
+                {message.content}
+              </Typography>
+            </Box>
+          </Box>
+        );
+      })}
     </Box>
   );
 });

@@ -10,7 +10,7 @@ interface Props {
 
 export const MessageInput = ({ conversationId, onMessageSent, isMobile }: Props) => {
   const [inputValue, setInputValue] = useState("");
-  const inputRef = useRef<HTMLInputElement>(null); // Para foco automático
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleSendMessage = () => {
     const trimmed = inputValue.trim();
@@ -19,8 +19,7 @@ export const MessageInput = ({ conversationId, onMessageSent, isMobile }: Props)
     try {
       onMessageSent(trimmed);
       setInputValue("");
-      inputRef.current?.focus(); // Foco de volta pro input
-      console.log(`✅ Mensagem enviada para chat ${conversationId}: "${trimmed}"`); // Log pra debug
+      inputRef.current?.focus();
     } catch (err) {
       console.error("❌ Erro ao enviar mensagem:", err);
     }
@@ -37,75 +36,106 @@ export const MessageInput = ({ conversationId, onMessageSent, isMobile }: Props)
     <Box
       sx={{
         display: "flex",
-        gap: 1,
-        alignItems: "center",
-        p: 1.5,
-        background: "rgba(15, 15, 30, 0.7)",
-        backdropFilter: "blur(10px)",
-        borderRadius: "32px",
-        border: "1.5px solid rgba(0, 200, 255, 0.25)",
-        boxShadow: "0 4px 12px rgba(0, 200, 255, 0.1)",
+        gap: 1.5,
+        alignItems: "flex-end",
+        p: 2,
+        background: "linear-gradient(135deg, rgba(15, 20, 40, 0.4) 0%, rgba(25, 30, 50, 0.3) 100%)",
+        backdropFilter: "blur(12px)",
+        borderRadius: "24px",
+        border: "1px solid rgba(0, 180, 255, 0.2)",
+        boxShadow: "0 8px 32px rgba(0, 0, 0, 0.15), 0 2px 8px rgba(0, 150, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05)",
+        transition: "all 0.3s ease-in-out",
+        
+        "&:focus-within": {
+          borderColor: "rgba(0, 200, 255, 0.4)",
+          boxShadow: "0 8px 40px rgba(0, 150, 255, 0.2), 0 4px 16px rgba(0, 200, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1)",
+          transform: "translateY(-1px)",
+        },
       }}
     >
       <TextField
         inputRef={inputRef}
         multiline
-        maxRows={3}
+        maxRows={4}
         placeholder="Digite sua mensagem..."
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}
-        onKeyDown={handleKeyDown} // Mudei pra onKeyDown (melhor que onKeyPress em React)
+        onKeyDown={handleKeyDown}
         fullWidth
         variant="outlined"
         sx={{
           "& .MuiOutlinedInput-root": {
-            color: "#fff",
-            backgroundColor: "rgba(30, 30, 60, 0.5)",
-            borderRadius: "32px",
+            color: "#f0f2f5",
+            backgroundColor: "rgba(30, 35, 60, 0.3)",
+            borderRadius: "20px",
+            transition: "all 0.3s ease-in-out",
+            
             "& fieldset": {
-              borderColor: "rgba(0, 200, 255, 0.3)",
+              borderColor: "rgba(0, 180, 255, 0.2)",
+              transition: "all 0.3s ease-in-out",
             },
+            
             "&:hover fieldset": {
-              borderColor: "rgba(0, 200, 255, 0.6)",
+              borderColor: "rgba(0, 200, 255, 0.4)",
             },
+            
             "&.Mui-focused": {
-              backgroundColor: "rgba(30, 30, 60, 0.7)",
-              boxShadow: "0 0 20px rgba(0, 200, 255, 0.2)",
+              backgroundColor: "rgba(40, 45, 70, 0.4)",
+              boxShadow: "0 0 0 2px rgba(0, 200, 255, 0.1)",
+              
               "& fieldset": {
-                borderColor: "rgba(0, 200, 255, 0.8)",
+                borderColor: "rgba(0, 220, 255, 0.6)",
+                borderWidth: "1px",
               },
             },
           },
-          "& .MuiOutlinedInput-input::placeholder": {
-            color: "rgba(0, 200, 255, 0.4)",
-            opacity: 1,
-          },
-        }}
-        InputProps={{
-          sx: {
-            fontSize: isMobile ? "0.9rem" : "1rem", // Ajuste pra mobile
+          
+          "& .MuiOutlinedInput-input": {
+            fontSize: isMobile ? "0.95rem" : "1.05rem",
+            fontWeight: 400,
+            padding: "12px 20px",
+            "&::placeholder": {
+              color: "rgba(0, 200, 255, 0.4)",
+              opacity: 1,
+              fontWeight: 300,
+            },
           },
         }}
       />
+      
       <IconButton
         onClick={handleSendMessage}
-        disabled={!inputValue.trim()} // Desabilita se vazio
+        disabled={!inputValue.trim()}
         sx={{
-          color: "rgba(0, 200, 255, 0.7)",
-          background: "rgba(0, 200, 255, 0.05)",
+          color: inputValue.trim() ? "#00e5ff" : "rgba(0, 200, 255, 0.3)",
+          background: inputValue.trim() 
+            ? "linear-gradient(135deg, rgba(0, 150, 255, 0.2) 0%, rgba(0, 200, 255, 0.15) 100%)"
+            : "rgba(30, 35, 60, 0.3)",
+          backdropFilter: "blur(8px)",
+          border: inputValue.trim() 
+            ? "1px solid rgba(0, 200, 255, 0.4)"
+            : "1px solid rgba(0, 200, 255, 0.2)",
+          borderRadius: "16px",
+          p: 1.5,
+          transition: "all 0.3s ease-in-out",
+          transform: "scale(1)",
+          
           "&:hover": {
-            color: "#00e5ff",
-            background: "rgba(0, 200, 255, 0.15)",
-            transform: "scale(1.15)",
-            transition: "all 0.2s ease-in-out",
-            boxShadow: "0 0 12px rgba(0, 200, 255, 0.5)",
+            background: inputValue.trim()
+              ? "linear-gradient(135deg, rgba(0, 150, 255, 0.3) 0%, rgba(0, 200, 255, 0.25) 100%)"
+              : "rgba(40, 45, 70, 0.4)",
+            transform: "scale(1.1) translateY(-1px)",
+            boxShadow: inputValue.trim()
+              ? "0 8px 24px rgba(0, 200, 255, 0.3), 0 4px 12px rgba(0, 200, 255, 0.2)"
+              : "none",
           },
-          "&:disabled": {
-            color: "rgba(0, 200, 255, 0.3)",
+          
+          "&:active": {
+            transform: "scale(1.05) translateY(0)",
           },
         }}
       >
-        <SendIcon size={isMobile ? 18 : 22} />
+        <SendIcon size={isMobile ? 20 : 22} />
       </IconButton>
     </Box>
   );

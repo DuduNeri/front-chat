@@ -137,7 +137,7 @@ export const CreateRoomModal = ({
                 textShadow: "0 0 8px rgba(100, 200, 255, 0.4)",
               }}
             >
-              Criar Nova Sala
+              Criar Novo Chat
             </Typography>
 
             <IconButton
@@ -157,7 +157,7 @@ export const CreateRoomModal = ({
 
           {/* INPUT NOME */}
           <TextField
-            label="Nome da Sala"
+            label="Nome do Chat"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             fullWidth

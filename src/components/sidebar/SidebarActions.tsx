@@ -49,60 +49,105 @@ export const SidebarActions = ({ isMobile }: Props) => {
     container: {
       display: "flex",
       flexDirection: "column" as const,
-      gap: isMobile ? 0.8 : 1.5,
+      gap: isMobile ? 1 : 1.8,
       width: "100%",
-      mt: isMobile ? 1.5 : 2,
-      px: isMobile ? 0.6 : 1,
+      mt: isMobile ? 2 : 2.5,
+      px: isMobile ? 0.8 : 1.2,
+      background: "rgba(255, 255, 255, 0.03)",
+      backdropFilter: "blur(12px)",
+      borderRadius: "18px",
+      border: "1px solid rgba(255, 255, 255, 0.06)",
+      py: 2,
     },
 
     buttonBase: {
       display: "flex",
       alignItems: "center",
       width: "100%",
-      borderRadius: 2,
-      px: isMobile ? 1.4 : 2,
-      py: isMobile ? 0.8 : 1.2,
+      borderRadius: "14px",
+      px: isMobile ? 1.6 : 2.2,
+      py: isMobile ? 1 : 1.4,
       justifyContent: "flex-start",
-      transition: "0.25s ease",
+      transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
       cursor: "pointer",
+      background: "transparent",
+      position: "relative",
+      overflow: "hidden",
+
+      "&::before": {
+        content: '""',
+        position: "absolute",
+        left: 0,
+        top: 0,
+        bottom: 0,
+        width: "3px",
+        background: "currentColor",
+        opacity: 0,
+        transform: "scaleY(0)",
+        transition: "all 0.3s ease",
+        borderRadius: "0 2px 2px 0",
+      },
 
       ...(isMobile
-        ? {}
+        ? {
+            "&:active": {
+              transform: "scale(0.98)",
+              background: "rgba(255, 255, 255, 0.05)",
+            },
+          }
         : {
             "&:hover": {
-              transform: "translateX(4px)",
-              background: "rgba(100,200,255,0.08)",
-              boxShadow: "0 0 10px rgba(100,200,255,0.18)",
+              transform: "translateX(6px)",
+              background: "rgba(100, 200, 255, 0.08)",
+              boxShadow: "0 4px 20px rgba(100, 200, 255, 0.15), 0 2px 8px rgba(100, 200, 255, 0.1)",
+              
+              "&::before": {
+                opacity: 0.6,
+                transform: "scaleY(1)",
+              },
             },
           }),
     },
 
     label: {
-      ml: 1.3,
-      fontSize: isMobile ? "0.88rem" : "0.92rem",
+      ml: 1.8,
+      fontSize: isMobile ? "0.9rem" : "0.95rem",
       fontWeight: 500,
       color: "inherit",
+      letterSpacing: "0.01em",
+      transition: "all 0.3s ease",
     },
 
     primary: {
-      color: "rgba(200, 240, 255, 0.92)",
-      "&:hover": {
-        color: "#64C8FF",
-      },
+      color: "rgba(180, 230, 255, 0.95)",
+      background: "linear-gradient(135deg, rgba(0, 150, 255, 0.1) 0%, rgba(0, 200, 255, 0.05) 100%)",
+      
+      ...(isMobile ? {} : {
+        "&:hover": {
+          color: "#88D4FF",
+          background: "linear-gradient(135deg, rgba(0, 150, 255, 0.15) 0%, rgba(0, 200, 255, 0.1) 100%)",
+        },
+      }),
     },
 
     standard: {
-      color: "rgba(220, 220, 230, 0.85)",
-      "&:hover": {
-        color: "rgba(130, 200, 255, 1)",
-      },
+      color: "rgba(220, 230, 245, 0.9)",
+      
+      ...(isMobile ? {} : {
+        "&:hover": {
+          color: "rgba(160, 220, 255, 1)",
+        },
+      }),
     },
 
     danger: {
-      color: "rgba(255, 120, 120, 0.82)",
-      "&:hover": {
-        color: "rgba(255, 100, 100, 1)",
-      },
+      color: "rgba(255, 140, 140, 0.9)",
+      
+      ...(isMobile ? {} : {
+        "&:hover": {
+          color: "rgba(255, 120, 120, 1)",
+        },
+      }),
     },
   };
 
@@ -111,7 +156,7 @@ export const SidebarActions = ({ isMobile }: Props) => {
       return <Box>{children}</Box>;
     }
     return (
-      <Tooltip title={title} placement="right">
+      <Tooltip title={title} placement="right" arrow>
         <Box>{children}</Box>
       </Tooltip>
     );
